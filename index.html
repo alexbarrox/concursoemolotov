@@ -113,18 +113,6 @@
 
       <!-- Quick Action CTA -->
       <div class="flex items-center gap-2.5">
-        <!-- Botão Novo Concurso -->
-        <button onclick="openCreateModal()" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-extrabold text-xs px-3.5 py-2 rounded-lg shadow-lg shadow-cyan-950/40 transition-all flex items-center gap-2">
-          <i class="fa-solid fa-plus-circle text-sm"></i>
-          <span>Novo Concurso / Cargo</span>
-        </button>
-
-        <!-- Toggle Modo Edição / Admin -->
-        <button id="btnAdminToggle" onclick="toggleAdminMode()" title="Ativar ou desativar ferramentas de edição manual" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
-          <i id="adminToggleIcon" class="fa-solid fa-lock text-slate-400"></i>
-          <span class="hidden md:inline" id="adminToggleLabel">Modo Leitor</span>
-        </button>
-
         <button onclick="syncRemoteSheet(true)" title="Forçar atualização dos dados agora" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 hover:border-cyan-500/50 text-xs font-semibold px-3 py-2 rounded-lg transition-colors flex items-center gap-1.5">
           <i id="btnQuickRefreshIcon" class="fa-solid fa-arrows-rotate"></i>
           <span class="hidden sm:inline">Atualizar Dados</span>
@@ -132,12 +120,7 @@
 
         <button onclick="toggleDataDrawer()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors flex items-center gap-1.5">
           <i class="fa-solid fa-file-excel text-emerald-400"></i>
-          <span class="hidden sm:inline">Planilha</span>
-        </button>
-
-        <button onclick="exportCurrentToExcel()" title="Exportar planilha completa atualizada com as edições feitas" class="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-slate-950 font-bold text-xs px-3 py-2 rounded-lg transition-all flex items-center gap-1.5 shadow-md">
-          <i class="fa-solid fa-file-export"></i>
-          <span class="hidden md:inline">Exportar .xlsx</span>
+          <span class="hidden sm:inline">Planilha Fonte</span>
         </button>
       </div>
     </div>
@@ -277,15 +260,6 @@
     <!-- HERO & SELETOR DE VISUALIZAÇÕES -->
     <div class="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 mb-6 shadow-xl relative overflow-hidden">
       <div class="absolute -right-20 -top-20 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-      <!-- Banner Informativo de Modo Admin Ativo -->
-      <div id="adminBannerAlert" class="hidden mb-4 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-shield-halved text-amber-400 text-sm"></i>
-          <span><strong>Modo Gestão Ativado:</strong> Você pode adicionar, editar, clonar cargos e excluir itens. As alterações salvam automaticamente no navegador.</span>
-        </div>
-        <button onclick="toggleAdminMode()" class="underline hover:text-amber-200 text-[11px] font-bold">Encerrar Modo Gestão</button>
-      </div>
 
       <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
         <div>
@@ -440,7 +414,6 @@
                 <th class="py-3 px-4">Data da Prova</th>
                 <th class="py-3 px-4">Local da Prova</th>
                 <th class="py-3 px-4 text-center">Edital</th>
-                <th class="py-3 px-4 text-center table-admin-col hidden">Ações Admin</th>
               </tr>
             </thead>
             <tbody id="table-container" class="divide-y divide-slate-800/60 text-slate-300">
@@ -484,167 +457,6 @@
 
       <div id="modalContent">
         <!-- Injected via JavaScript -->
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: FORMULÁRIO DE CRIAÇÃO / EDIÇÃO MANUAL (CRUD) -->
-  <div id="crudModal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-    <div class="bg-slate-900 rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-700 relative max-h-[90vh] flex flex-col my-auto">
-      
-      <!-- Cabeçalho Modal -->
-      <div class="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
-        <div class="flex items-center gap-2.5">
-          <div id="crudModalIcon" class="w-9 h-9 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-base">
-            <i class="fa-solid fa-plus"></i>
-          </div>
-          <div>
-            <h3 id="crudModalTitle" class="text-base font-extrabold text-white">Cadastrar Novo Concurso / Cargo</h3>
-            <p class="text-xs text-slate-400">Preencha os campos correspondentes à planilha para atualizar os dados.</p>
-          </div>
-        </div>
-        <button onclick="closeCrudModal()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-
-      <!-- Formulário com Scroll -->
-      <form id="crudForm" onsubmit="handleFormSubmit(event)" class="overflow-y-auto pr-1 py-4 space-y-4 flex-1">
-        <input type="hidden" id="field-id">
-
-        <!-- Linha 1: Concurso / Órgão & Ano -->
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-          <div class="sm:col-span-3">
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Concurso / Órgão <span class="text-rose-400">*</span></label>
-            <input type="text" id="field-concurso" required placeholder="Ex: Banco Central, DATAPREV, SERPRO, TRT-2"
-                   class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Ano <span class="text-rose-400">*</span></label>
-            <input type="number" id="field-ano" required min="2020" max="2035" value="2026"
-                   class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 font-mono">
-          </div>
-        </div>
-
-        <!-- Linha 2: Cargo e Especialidade TI -->
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Cargo / Especialidade de TI <span class="text-rose-400">*</span></label>
-          <input type="text" id="field-cargo" required placeholder="Ex: Analista de TI - Engenharia de Dados & IA"
-                 class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500">
-        </div>
-
-        <!-- Linha 3: Status & Banca -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Status do Concurso <span class="text-rose-400">*</span></label>
-            <select id="field-status" required class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500">
-              <option value="Inscrições Abertas">Inscrições Abertas</option>
-              <option value="Previsto">Previsto</option>
-              <option value="Em Andamento">Em Andamento</option>
-              <option value="Encerrado">Encerrado</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Banca Organizadora <span class="text-rose-400">*</span></label>
-            <input type="text" id="field-banca" required placeholder="Ex: Cebraspe, FGV, Cesgranrio, FCC"
-                   class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500">
-          </div>
-        </div>
-
-        <!-- Linha 4: Vagas Imediatas, Cadastro Reserva e Remuneração -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Vagas Imediatas <span class="text-rose-400">*</span></label>
-            <input type="number" id="field-vagas" required min="0" value="1"
-                   class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 font-mono">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Cadastro de Reserva (CR)</label>
-            <input type="number" id="field-cr" min="0" value="0" placeholder="Ex: 50"
-                   class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 font-mono">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Remuneração Inicial (R$) <span class="text-rose-400">*</span></label>
-            <input type="number" id="field-remuneracao" required step="0.01" min="0" placeholder="Ex: 14500.00"
-                   class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-emerald-400 focus:outline-none focus:border-cyan-500 font-mono font-bold">
-          </div>
-        </div>
-
-        <!-- Linha 5: Período de Inscrição (De e Até) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Início das Inscrições (Inscrição de)</label>
-            <input type="date" id="field-inscricaoDe"
-                   class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 font-mono">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Fim das Inscrições (Inscrições até)</label>
-            <input type="date" id="field-inscricoesAte"
-                   class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 font-mono">
-          </div>
-        </div>
-
-        <!-- Linha 6: Data da Prova e Local -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Data da Prova</label>
-            <input type="date" id="field-dataProva"
-                   class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 font-mono">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Local da Prova</label>
-            <input type="text" id="field-localProva" placeholder="Ex: Brasília/DF, Capitais ou Nacional"
-                   class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500">
-          </div>
-        </div>
-
-        <!-- Linha 7: Link do Edital -->
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Link do Edital Oficial (URL)</label>
-          <div class="relative">
-            <i class="fa-solid fa-link absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-            <input type="url" id="field-edital" placeholder="https://..."
-                   class="w-full pl-8 pr-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 font-mono">
-          </div>
-        </div>
-
-        <!-- Linha 8: Anotações TI e Tags Opcionais -->
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Anotações / Destaques TI <span class="text-slate-500 font-normal">(Opcional)</span></label>
-          <textarea id="field-notas" rows="2" placeholder="Ex: Exige graduação específica em computação; prova de títulos tem peso 2; focar em Python e Docker..."
-                    class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-cyan-500"></textarea>
-        </div>
-
-        <!-- Rodapé com Ações do Modal -->
-        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
-          <button type="button" onclick="closeCrudModal()" class="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 font-semibold text-xs transition-colors">
-            Cancelar
-          </button>
-          <button type="submit" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold px-5 py-2 rounded-lg text-xs transition-all shadow-lg shadow-cyan-950/40 flex items-center gap-1.5">
-            <i class="fa-solid fa-floppy-disk"></i>
-            <span>Salvar Registro</span>
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO -->
-  <div id="deleteConfirmModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-rose-500/30 text-center">
-      <div class="w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center mx-auto mb-3">
-        <i class="fa-solid fa-triangle-exclamation text-xl"></i>
-      </div>
-      <h3 class="text-base font-bold text-white mb-1">Excluir Concurso?</h3>
-      <p id="deleteConfirmDesc" class="text-xs text-slate-400 mb-5">Esta ação removerá este cargo da listagem e do armazenamento local.</p>
-      <input type="hidden" id="deleteTargetId">
-      <div class="flex items-center gap-2.5">
-        <button onclick="closeDeleteModal()" class="flex-1 py-2 px-3 rounded-lg border border-slate-700 text-slate-300 font-semibold text-xs hover:bg-slate-800 transition-colors">
-          Cancelar
-        </button>
-        <button onclick="confirmDeleteAction()" class="flex-1 py-2 px-3 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition-colors shadow-lg shadow-rose-950/40">
-          Confirmar Exclusão
-        </button>
       </div>
     </div>
   </div>
@@ -805,40 +617,10 @@
     let filteredList = [];
     let currentView = 'cards';
     let currentDataSourceName = "Demonstração Integrada";
-    let isAdminMode = true; // Habilitado por padrão para facilidade de gestão
 
     const STORAGE_KEY = 'concursos_ti_sheet_data';
     const STORAGE_META_KEY = 'concursos_ti_sheet_meta';
     const STORAGE_URL_KEY = 'concursos_ti_sheet_url';
-
-    // =========================================================================
-    // 0. CONTROLE DO MODO ADMIN / LEITOR
-    // =========================================================================
-    function toggleAdminMode() {
-      isAdminMode = !isAdminMode;
-      updateAdminModeUI();
-      renderCurrentView();
-      showToast(isAdminMode ? "Modo Gestão/Admin ATIVADO" : "Modo Leitor ATIVADO (ações de edição ocultas)", "info");
-    }
-
-    function updateAdminModeUI() {
-      const icon = document.getElementById('adminToggleIcon');
-      const label = document.getElementById('adminToggleLabel');
-      const banner = document.getElementById('adminBannerAlert');
-      const tableAdminHeader = document.querySelector('.table-admin-col');
-
-      if (isAdminMode) {
-        icon.className = "fa-solid fa-unlock-keyhole text-amber-400";
-        label.innerText = "Modo Gestão";
-        banner.classList.remove('hidden');
-        if (tableAdminHeader) tableAdminHeader.classList.remove('hidden');
-      } else {
-        icon.className = "fa-solid fa-lock text-slate-400";
-        label.innerText = "Modo Leitor";
-        banner.classList.add('hidden');
-        if (tableAdminHeader) tableAdminHeader.classList.add('hidden');
-      }
-    }
 
     // =========================================================================
     // 1. PROCESSAMENTO E NORMALIZAÇÃO DE PLANILHA (SheetJS)
@@ -1307,24 +1089,11 @@
             <div class="flex items-start justify-between gap-2 mb-3">
               ${getStatusBadge(item.status)}
               
-              <!-- Ações Admin Rápidas no Card -->
+              <!-- Ações Rápidas no Card -->
               <div class="flex items-center gap-1.5">
                 <span class="text-xs font-mono font-semibold text-slate-400 bg-slate-950 border border-slate-800 px-2 py-0.5 rounded">
                   ${item.ano}
                 </span>
-                ${isAdminMode ? `
-                  <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 rounded-lg p-0.5">
-                    <button onclick="openEditModal(${item.id})" title="Editar concurso" class="text-slate-400 hover:text-cyan-400 p-1 text-xs">
-                      <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    <button onclick="duplicateConcurso(${item.id})" title="Duplicar cargo" class="text-slate-400 hover:text-emerald-400 p-1 text-xs">
-                      <i class="fa-solid fa-copy"></i>
-                    </button>
-                    <button onclick="openDeleteModal(${item.id})" title="Excluir" class="text-slate-400 hover:text-rose-400 p-1 text-xs">
-                      <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                  </div>
-                ` : ''}
               </div>
             </div>
 
@@ -1434,21 +1203,6 @@
               <i class="fa-solid fa-file-lines text-[10px]"></i> Link
             </a>
           </td>
-          ${isAdminMode ? `
-            <td class="py-3 px-4 text-center whitespace-nowrap">
-              <div class="inline-flex items-center gap-1">
-                <button onclick="openEditModal(${item.id})" title="Editar" class="p-1.5 text-slate-400 hover:text-cyan-400 rounded bg-slate-950 border border-slate-800 hover:border-cyan-500/50">
-                  <i class="fa-solid fa-pen-to-square"></i>
-                </button>
-                <button onclick="duplicateConcurso(${item.id})" title="Duplicar Cargo" class="p-1.5 text-slate-400 hover:text-emerald-400 rounded bg-slate-950 border border-slate-800 hover:border-emerald-500/50">
-                  <i class="fa-solid fa-copy"></i>
-                </button>
-                <button onclick="openDeleteModal(${item.id})" title="Excluir" class="p-1.5 text-slate-400 hover:text-rose-400 rounded bg-slate-950 border border-slate-800 hover:border-rose-500/50">
-                  <i class="fa-solid fa-trash-can"></i>
-                </button>
-              </div>
-            </td>
-          ` : ''}
         </tr>
       `).join('');
     }
@@ -1531,11 +1285,6 @@
                       <span class="text-xs font-bold text-slate-200 font-mono">${formatDate(item.dataProva)}</span>
                     </div>
                     <div class="flex items-center gap-2">
-                      ${isAdminMode ? `
-                        <button onclick="openEditModal(${item.id})" title="Editar" class="text-xs p-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 transition-colors">
-                          <i class="fa-solid fa-pen"></i>
-                        </button>
-                      ` : ''}
                       <button onclick="openDetailsModal(${item.id})" class="text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 font-semibold text-slate-300 transition-colors">
                         Ficha
                       </button>
@@ -1645,152 +1394,6 @@
     // =========================================================================
     // 7. MODAL DE DETALHES & UTILITÁRIOS
     // =========================================================================
-    // 7. GERENCIAMENTO MANUAL CRUD (CRIAR, EDITAR, DUPLICAR, EXCLUIR)
-    // =========================================================================
-
-    function openCreateModal() {
-      document.getElementById('crudForm').reset();
-      document.getElementById('field-id').value = '';
-      document.getElementById('crudModalTitle').innerText = 'Cadastrar Novo Concurso / Cargo';
-      document.getElementById('crudModalIcon').innerHTML = '<i class="fa-solid fa-plus"></i>';
-      document.getElementById('field-ano').value = new Date().getFullYear();
-      document.getElementById('field-status').value = 'Inscrições Abertas';
-      document.getElementById('field-vagas').value = 1;
-      document.getElementById('field-cr').value = 0;
-      
-      document.getElementById('crudModal').classList.remove('hidden');
-    }
-
-    function openEditModal(id) {
-      const item = rawDataset.find(c => c.id === id);
-      if (!item) return;
-
-      document.getElementById('field-id').value = item.id;
-      document.getElementById('crudModalTitle').innerText = `Editar: ${item.concurso}`;
-      document.getElementById('crudModalIcon').innerHTML = '<i class="fa-solid fa-pen-to-square"></i>';
-
-      document.getElementById('field-concurso').value = item.concurso || '';
-      document.getElementById('field-ano').value = item.ano || new Date().getFullYear();
-      document.getElementById('field-cargo').value = item.cargo || '';
-      document.getElementById('field-status').value = item.status || 'Previsto';
-      document.getElementById('field-banca').value = item.banca || '';
-      document.getElementById('field-vagas').value = item.vagasImediatas || 0;
-      document.getElementById('field-cr').value = item.cr || 0;
-      document.getElementById('field-remuneracao').value = item.remuneracaoInicial || '';
-      document.getElementById('field-inscricaoDe').value = item.inscricaoDe !== 'A definir' ? item.inscricaoDe : '';
-      document.getElementById('field-inscricoesAte').value = item.inscricoesAte !== 'A definir' ? item.inscricoesAte : '';
-      document.getElementById('field-dataProva').value = item.dataProva !== 'A definir' ? item.dataProva : '';
-      document.getElementById('field-localProva').value = item.localProva || '';
-      document.getElementById('field-edital').value = item.edital || '';
-      document.getElementById('field-notas').value = item.notas || '';
-
-      document.getElementById('crudModal').classList.remove('hidden');
-    }
-
-    function closeCrudModal() {
-      document.getElementById('crudModal').classList.add('hidden');
-    }
-
-    function handleFormSubmit(event) {
-      event.preventDefault();
-
-      const idVal = document.getElementById('field-id').value;
-      const isEditing = Boolean(idVal);
-
-      const novoConcurso = {
-        id: isEditing ? Number(idVal) : Date.now(),
-        ano: parseInt(document.getElementById('field-ano').value, 10) || new Date().getFullYear(),
-        status: document.getElementById('field-status').value,
-        concurso: document.getElementById('field-concurso').value.trim(),
-        banca: document.getElementById('field-banca').value.trim() || 'A Definir',
-        cargo: document.getElementById('field-cargo').value.trim(),
-        vagasImediatas: parseInt(document.getElementById('field-vagas').value, 10) || 0,
-        cr: parseInt(document.getElementById('field-cr').value, 10) || 0,
-        remuneracaoInicial: parseFloat(document.getElementById('field-remuneracao').value) || 0,
-        inscricaoDe: document.getElementById('field-inscricaoDe').value || 'A definir',
-        inscricoesAte: document.getElementById('field-inscricoesAte').value || 'A definir',
-        dataProva: document.getElementById('field-dataProva').value || 'A definir',
-        localProva: document.getElementById('field-localProva').value.trim() || 'Nacional',
-        edital: document.getElementById('field-edital').value.trim() || '#',
-        notas: document.getElementById('field-notas').value.trim()
-      };
-
-      if (isEditing) {
-        const index = rawDataset.findIndex(c => c.id === Number(idVal));
-        if (index !== -1) {
-          rawDataset[index] = novoConcurso;
-          showToast(`Concurso "${novoConcurso.concurso}" atualizado com sucesso!`, "success");
-        }
-      } else {
-        // Novo item é colocado no topo
-        rawDataset.unshift(novoConcurso);
-        showToast(`Novo concurso "${novoConcurso.concurso}" cadastrado!`, "success");
-      }
-
-      // Persiste no LocalStorage e atualiza interface
-      saveToLocalStorage(rawDataset, currentDataSourceName);
-      updateSourceStatusUI(currentDataSourceName, rawDataset.length);
-      populateBancaFilterOptions(rawDataset);
-      applyFilters();
-      closeCrudModal();
-    }
-
-    // Duplica um cargo de concurso já existente (muito útil em editais com 10 cargos de TI)
-    function duplicateConcurso(id) {
-      const original = rawDataset.find(c => c.id === id);
-      if (!original) return;
-
-      const clone = {
-        ...original,
-        id: Date.now(),
-        cargo: `${original.cargo} (Cópia / Outro Cargo)`
-      };
-
-      rawDataset.unshift(clone);
-      saveToLocalStorage(rawDataset, currentDataSourceName);
-      updateSourceStatusUI(currentDataSourceName, rawDataset.length);
-      populateBancaFilterOptions(rawDataset);
-      applyFilters();
-      showToast(`Cargo clonado com sucesso: "${clone.cargo}"`, "info");
-      
-      // Abre direto na edição da cópia para o usuário só alterar o cargo/vagas
-      setTimeout(() => openEditModal(clone.id), 300);
-    }
-
-    // Controle do Modal de Exclusão
-    function openDeleteModal(id) {
-      const item = rawDataset.find(c => c.id === id);
-      if (!item) return;
-
-      document.getElementById('deleteTargetId').value = id;
-      document.getElementById('deleteConfirmDesc').innerHTML = `Tem certeza que deseja remover o concurso <strong>"${item.concurso}"</strong> (${item.cargo})?`;
-      document.getElementById('deleteConfirmModal').classList.remove('hidden');
-    }
-
-    function closeDeleteModal() {
-      document.getElementById('deleteConfirmModal').classList.add('hidden');
-    }
-
-    function confirmDeleteAction() {
-      const targetId = Number(document.getElementById('deleteTargetId').value);
-      if (!targetId) return;
-
-      const index = rawDataset.findIndex(c => c.id === targetId);
-      if (index !== -1) {
-        const removedName = rawDataset[index].concurso;
-        rawDataset.splice(index, 1);
-        saveToLocalStorage(rawDataset, currentDataSourceName);
-        updateSourceStatusUI(currentDataSourceName, rawDataset.length);
-        populateBancaFilterOptions(rawDataset);
-        applyFilters();
-        showToast(`Concurso "${removedName}" foi excluído.`, "warning");
-      }
-      closeDeleteModal();
-    }
-
-    // =========================================================================
-    // 8. MODAL DE DETALHES & UTILITÁRIOS
-    // =========================================================================
 
     function openDetailsModal(id) {
       const item = rawDataset.find(c => c.id === id);
@@ -1847,21 +1450,7 @@
           </div>
         </div>
 
-        ${item.notas ? `
-          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 mb-4 text-xs">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">
-              <i class="fa-solid fa-note-sticky mr-1"></i> Observações & Destaques de TI:
-            </span>
-            <p class="text-slate-300 leading-relaxed whitespace-pre-line">${item.notas}</p>
-          </div>
-        ` : ''}
-
         <div class="flex items-center gap-3">
-          ${isAdminMode ? `
-            <button onclick="closeDetailsModal(); openEditModal(${item.id});" class="py-2.5 px-3 rounded-xl border border-cyan-500/50 bg-cyan-950/40 text-cyan-300 font-bold text-xs hover:bg-cyan-900/60 transition-colors flex items-center gap-1.5">
-              <i class="fa-solid fa-pen"></i> Editar
-            </button>
-          ` : ''}
           <button onclick="closeDetailsModal()" class="flex-1 py-2.5 px-4 rounded-xl border border-slate-700 text-slate-300 font-semibold text-xs hover:bg-slate-800 transition-colors">
             Fechar
           </button>
@@ -1911,18 +1500,12 @@
     // Fecha modais clicando fora
     window.addEventListener('click', function(e) {
       const detModal = document.getElementById('detailsModal');
-      const crudMod = document.getElementById('crudModal');
-      const delMod = document.getElementById('deleteConfirmModal');
 
       if (e.target === detModal) closeDetailsModal();
-      if (e.target === crudMod) closeCrudModal();
-      if (e.target === delMod) closeDeleteModal();
     });
 
     // INICIALIZAÇÃO
     window.onload = async function() {
-      updateAdminModeUI();
-      
       // 1. Tenta carregar dados salvos no cache local para renderização imediata sem flash
       const hasStored = loadFromLocalStorage();
       if (!hasStored) {
