@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Concurso e Molotov - Nosso objetivo é a mudança, por dentro!</title>
-  <!-- Tailwind CSS via CDN -->
+  <title>Concurso e Molotov | O Portal de TI no Setor Público</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Acompanhe editais, cargos de TI, salários, prazos de inscrição e cronogramas de concursos públicos de Tecnologia da Informação.">
+  <meta name="theme-color" content="#070c18">
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- SheetJS (xlsx.full.min.js) para parser de planilhas Excel no cliente -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Google Fonts: Inter & JetBrains Mono -->
@@ -62,35 +65,27 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #475569;
     }
-    .drag-active {
-      border-color: #38bdf8 !important;
-      background-color: rgba(14, 165, 233, 0.12) !important;
-      transform: scale(1.01);
-    }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 antialiased min-h-screen flex flex-col font-sans selection:bg-cyan-500 selection:text-slate-950">
 
-  <!-- TOP BROADCAST BAR -->
+  <!-- TOP BRANDING BAR -->
   <div class="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-2">
         <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse mr-1.5"></span> CONCURSOS TI ENGINE v2.0
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse mr-1.5"></span> RADAR ATIVO
         </span>
-        <span class="hidden sm:inline text-slate-700">|</span>
-        <span class="text-slate-400 flex items-center gap-1.5 text-[11px] sm:text-xs">
-          <i class="fa-solid fa-file-excel text-emerald-400"></i> Alimentado diretamente por planilha Excel
+        <span class="text-slate-400 text-[11px] sm:text-xs">
+          Oportunidades, editais abertos e previsões em Tecnologia da Informação
         </span>
       </div>
 
-      <div class="flex items-center gap-4 text-xs font-mono">
-        <span id="headerSourceInfo" class="text-slate-400 text-[11px] flex items-center gap-1.5">
-          <i class="fa-solid fa-database text-cyan-400"></i> <span id="sourceLabelText">Carregando fonte...</span>
-        </span>
-        <button onclick="toggleDataDrawer()" class="text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1 text-[11px] underline underline-offset-4 decoration-cyan-500/50">
-          <i class="fa-solid fa-gear"></i> Gerenciar Planilha
-        </button>
+      <div class="flex items-center gap-3 text-xs">
+        <span class="text-slate-400 text-[11px] hidden sm:inline">Nosso objetivo é a mudança, por dentro!</span>
+        <a href="#view-cards" class="text-cyan-400 hover:text-cyan-300 font-medium text-[11px] flex items-center gap-1">
+          <i class="fa-solid fa-arrow-down"></i> Ver Editais
+        </a>
       </div>
     </div>
   </div>
@@ -100,196 +95,61 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-slate-950 font-mono font-extrabold text-lg shadow-lg shadow-cyan-500/20">
-          &lt;/&gt;
+          <i class="fa-solid fa-fire-flame-curved text-slate-950"></i>
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-lg font-extrabold tracking-tight text-white">Concursos TI<span class="text-cyan-400">.hub</span></h1>
-            <span class="text-[10px] font-semibold uppercase tracking-wider bg-cyan-950/80 text-cyan-400 px-2 py-0.5 rounded-md border border-cyan-800">Excel Sync</span>
+            <h1 class="text-lg font-extrabold tracking-tight text-white">Concurso e Molotov<span class="text-cyan-400">.pro</span></h1>
           </div>
-          <p class="text-xs text-slate-400 hidden sm:block">Editais, Vagas, Prazos e Salários da Carreira Pública de TI</p>
+          <p class="text-xs text-slate-400 hidden sm:block">Carreiras Públicas &bull; Desenvolvimento &bull; Infra &bull; Dados &bull; Cyber</p>
         </div>
       </div>
 
-      <!-- Quick Action CTA -->
-      <div class="flex items-center gap-2.5">
-        <button onclick="syncRemoteSheet(true)" title="Forçar atualização dos dados agora" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 hover:border-cyan-500/50 text-xs font-semibold px-3 py-2 rounded-lg transition-colors flex items-center gap-1.5">
-          <i id="btnQuickRefreshIcon" class="fa-solid fa-arrows-rotate"></i>
-          <span class="hidden sm:inline">Atualizar Dados</span>
-        </button>
-
-        <button onclick="toggleDataDrawer()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors flex items-center gap-1.5">
-          <i class="fa-solid fa-file-excel text-emerald-400"></i>
-          <span class="hidden sm:inline">Planilha Fonte</span>
-        </button>
+      <!-- Quick Metrics Pills -->
+      <div class="flex items-center gap-2">
+        <div class="bg-slate-800/80 border border-slate-700/80 px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs">
+          <span class="text-slate-400">Total Vagas:</span>
+          <span id="headerTotalVagas" class="text-cyan-400 font-mono font-bold">--</span>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- COLLAPSIBLE DATA DRAWER / MODAL DE GERENCIAMENTO DE EXCEL -->
-  <section id="dataDrawer" class="hidden bg-slate-900 border-b border-cyan-500/30 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      
-      <div class="flex items-center justify-between pb-4 mb-5 border-b border-slate-800">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
-            <i class="fa-solid fa-file-excel text-base"></i>
-          </div>
-          <div>
-            <h3 class="text-base font-bold text-white flex items-center gap-2">
-              Central de Alimentação de Dados (.xlsx / Google Sheets)
-            </h3>
-            <p class="text-xs text-slate-400">Suba seu arquivo Excel local ou informe um link público para sincronizar dados em tempo real.</p>
-          </div>
-        </div>
-        <button onclick="toggleDataDrawer()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 text-sm">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
-        <!-- MODO 1: UPLOAD DE ARQUIVO LOCAL -->
-        <div class="bg-slate-850 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
-                <i class="fa-solid fa-cloud-arrow-up"></i> Método 1: Upload de Arquivo Local
-              </span>
-              <span class="text-[10px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded font-mono">.xlsx, .xls, .csv</span>
-            </div>
-
-            <!-- Drag & Drop Zone -->
-            <div id="dropZone" 
-                 ondragover="handleDragOver(event)" 
-                 ondragleave="handleDragLeave(event)" 
-                 ondrop="handleDrop(event)"
-                 onclick="document.getElementById('fileInput').click()" 
-                 class="border-2 border-dashed border-slate-700 hover:border-cyan-500 bg-slate-900/60 rounded-xl p-6 text-center cursor-pointer transition-all duration-200 group">
-              <input type="file" id="fileInput" accept=".xlsx, .xls, .csv" class="hidden" onchange="handleFileSelect(event)">
-              <div class="w-12 h-12 rounded-full bg-slate-800 group-hover:bg-cyan-500/20 flex items-center justify-center mx-auto mb-3 text-slate-400 group-hover:text-cyan-400 transition-colors">
-                <i class="fa-solid fa-file-arrow-up text-xl"></i>
-              </div>
-              <p class="text-sm font-semibold text-slate-200">Arraste seu arquivo <span class="text-cyan-400 font-mono">.xlsx</span> aqui ou clique para procurar</p>
-              <p class="text-xs text-slate-500 mt-1">Lê todas as colunas de acordo com sua planilha automaticamente</p>
-            </div>
-          </div>
-
-          <div class="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800/80 text-xs">
-            <button onclick="downloadExcelTemplate()" class="text-slate-300 hover:text-cyan-400 flex items-center gap-1.5 font-medium transition-colors">
-              <i class="fa-solid fa-download text-emerald-400"></i> Baixar Modelo .xlsx Pronto
-            </button>
-            <span class="text-slate-500 text-[11px]">Normalização automática de cabeçalhos ativada</span>
-          </div>
-        </div>
-
-        <!-- MODO 2: SINCRONIZAÇÃO VIA URL PÚBLICA / GOOGLE PLANILHAS -->
-        <div class="bg-slate-850 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                <i class="fa-solid fa-link"></i> Método 2: URL de Planilha Pública / Web Sync
-              </span>
-              <span class="text-[10px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded font-mono">Live Sync</span>
-            </div>
-
-            <p class="text-xs text-slate-400 mb-3 leading-relaxed">
-              Cole o link público de exportação do <strong>Google Planilhas</strong> (publicado como CSV/XLSX), OneDrive, Dropbox ou GitHub:
-            </p>
-
-            <div class="space-y-3">
-              <div>
-                <label class="block text-[11px] font-semibold text-slate-400 mb-1">URL Remota do Google Sheets (.csv ou .xlsx)</label>
-                <div class="flex gap-2">
-                  <div class="relative flex-1">
-                    <i class="fa-solid fa-globe absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-                    <input type="url" id="remoteSheetUrl" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" 
-                           class="w-full pl-9 pr-3 py-2 text-xs bg-slate-900 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-cyan-500 font-mono">
-                  </div>
-                  <button onclick="syncRemoteSheet(true)" id="btnSyncRemote" class="bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold px-3.5 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all shrink-0">
-                    <i class="fa-solid fa-rotate"></i> Sincronizar
-                  </button>
-                </div>
-              </div>
-
-              <!-- Quick Helper for Google Sheets -->
-              <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-800 text-[11px] text-slate-400 space-y-1.5">
-                <p class="font-semibold text-slate-200 flex items-center gap-1.5">
-                  <i class="fa-brands fa-google text-amber-400"></i> Como obter o link correto no Google Sheets (1 minuto):
-                </p>
-                <ol class="list-decimal list-inside space-y-1 text-slate-300">
-                  <li>No Google Sheets: <em>Arquivo &rarr; Compartilhar &rarr; Publicar na Web</em>.</li>
-                  <li>No primeiro seletor escolha sua aba (ou <em>Documento Inteiro</em>) e no segundo escolha <strong>Valores separados por vírgula (.csv)</strong>.</li>
-                  <li>Clique em <strong>Publicar</strong>, copie o link gerado e cole no campo acima ou na constante <code class="text-cyan-400 font-mono">DEFAULT_GOOGLE_SHEETS_URL</code> no código.</li>
-                </ol>
-              </div>
-            </div>
-          </div>
-
-          <!-- Quick Controls: Cache & Defaults -->
-          <div class="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800/80 text-xs">
-            <button onclick="loadSampleDataset()" class="text-cyan-400 hover:text-cyan-300 font-medium flex items-center gap-1.5 transition-colors">
-              <i class="fa-solid fa-flask"></i> Carregar Dados de Exemplo (8 Editais)
-            </button>
-            <button onclick="clearStoredData()" class="text-rose-400 hover:text-rose-300 font-medium flex items-center gap-1.5 transition-colors">
-              <i class="fa-solid fa-trash-can"></i> Limpar Dados Salvos
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Current Sync Status Banner -->
-      <div id="syncFeedbackBox" class="mt-4 p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs flex flex-wrap items-center justify-between gap-2">
-        <div class="flex items-center gap-2 text-slate-300">
-          <i id="syncStatusIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
-          <span id="syncStatusMessage">Estado: Pronto para leitura de dados.</span>
-        </div>
-        <div class="flex items-center gap-3 text-slate-400 font-mono text-[11px]">
-          <span>Linhas válidas: <strong id="validRowsCount" class="text-cyan-400">0</strong></span>
-          <span>Armazenamento: <strong id="storageTypeBadge" class="text-emerald-400">Demonstração</strong></span>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
   <!-- MAIN WRAPPER -->
   <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
 
-    <!-- HERO & SELETOR DE VISUALIZAÇÕES -->
-    <div class="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 mb-6 shadow-xl relative overflow-hidden">
+    <!-- HERO SECTION -->
+    <div class="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-7 mb-6 shadow-xl relative overflow-hidden">
       <div class="absolute -right-20 -top-20 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
         <div>
-          <div class="flex items-center gap-2 mb-1.5">
+          <div class="flex items-center gap-2 mb-2">
             <span class="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
-              <i class="fa-solid fa-terminal text-cyan-500"></i> Portal de Carreiras Públicas de TI
-            </span>
-            <span id="activeDatasetTag" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-emerald-400 border border-emerald-500/30">
-              Template Demo
+              <i class="fa-solid fa-code-compare text-cyan-500"></i> Hub de Oportunidades em Tecnologia
             </span>
           </div>
-          <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-white">Editais, Vagas e Oportunidades em Tecnologia</h2>
-          <p class="text-slate-400 text-xs sm:text-sm mt-1 max-w-2xl">
-            Acompanhamento contínuo alimentado pela sua planilha. Selecione o modelo de visualização que melhor se adapta à sua análise:
+          <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+            Vagas, Salários e Prazos da Carreira Pública de TI
+          </h2>
+          <p class="text-slate-400 text-xs sm:text-sm mt-1.5 max-w-2xl leading-relaxed">
+            Acompanhe o status detalhado dos principais concursos do país com foco exclusivo em Ciência de Dados, Engenharia de Software, Infraestrutura, Redes e Segurança.
           </p>
         </div>
 
         <!-- Layout Selector Buttons -->
-        <div class="inline-flex p-1.5 bg-slate-950/80 rounded-xl border border-slate-800 shadow-inner shrink-0">
+        <div class="inline-flex p-1.5 bg-slate-950/80 rounded-xl border border-slate-800 shadow-inner shrink-0 self-start md:self-auto">
           <button id="btn-view-cards" onclick="switchView('cards')" class="layout-toggle-btn active flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-cyan-600 text-slate-950 shadow-md">
             <i class="fa-solid fa-grip"></i>
-            <span>1. Cartões</span>
+            <span>Cards</span>
           </button>
           <button id="btn-view-table" onclick="switchView('table')" class="layout-toggle-btn flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-slate-200">
             <i class="fa-solid fa-table-cells"></i>
-            <span>2. Tabela</span>
+            <span>Tabela</span>
           </button>
           <button id="btn-view-timeline" onclick="switchView('timeline')" class="layout-toggle-btn flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-slate-200">
             <i class="fa-solid fa-clock"></i>
-            <span>3. Cronograma</span>
+            <span>Prazos</span>
           </button>
         </div>
       </div>
@@ -301,7 +161,7 @@
         <!-- Search input -->
         <div class="relative flex-1">
           <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
-          <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Buscar por Concurso, Cargo (ex: DevOps, Redes, Gestão de TI) ou Local..." 
+          <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Buscar por Concurso, Cargo (ex: Dados, Software, Cyber) ou Local..." 
             class="w-full pl-10 pr-4 py-2 text-sm bg-slate-950 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-cyan-500 placeholder-slate-500">
         </div>
 
@@ -328,7 +188,7 @@
           <!-- Remuneration filter -->
           <div class="w-full sm:w-auto">
             <select id="filterRemuneracao" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-2 text-xs font-medium border border-slate-700 rounded-lg bg-slate-950 text-slate-200 focus:outline-none focus:border-cyan-500">
-              <option value="0">Remuneração: Qualquer</option>
+              <option value="0">Remuneração: Todas</option>
               <option value="8000">&gt; R$ 8.000</option>
               <option value="12000">&gt; R$ 12.000</option>
               <option value="16000">&gt; R$ 16.000</option>
@@ -337,9 +197,9 @@
           </div>
 
           <!-- Reset Filter Button -->
-          <button onclick="resetFilters()" title="Limpar Filtros" class="px-3 py-2 text-xs text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors flex items-center gap-1.5 font-medium border border-slate-700">
+          <button onclick="resetFilters()" title="Limpar Filtros" class="px-3 py-2 text-xs text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors flex items-center gap-1.5 font-medium border border-slate-700 shrink-0">
             <i class="fa-solid fa-rotate-left"></i>
-            <span class="sm:hidden lg:inline">Limpar</span>
+            <span>Limpar</span>
           </button>
         </div>
       </div>
@@ -347,9 +207,9 @@
       <!-- Quick Metrics Summary -->
       <div class="flex flex-wrap items-center justify-between text-xs text-slate-400 pt-3 mt-3 border-t border-slate-800 gap-2">
         <div class="flex items-center gap-2">
-          <span>Exibindo <strong id="count-visible" class="text-white">0</strong> editais filtrados</span>
+          <span>Exibindo <strong id="count-visible" class="text-white">0</strong> editais</span>
           <span class="text-slate-600">&bull;</span>
-          <span>Vagas Imediatas somadas: <strong id="totalVagasSum" class="text-cyan-400 font-mono">0</strong></span>
+          <span>Vagas Imediatas: <strong id="totalVagasSum" class="text-cyan-400 font-mono">0</strong></span>
         </div>
         <div class="flex items-center gap-3">
           <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Inscrições Abertas</span>
@@ -359,45 +219,15 @@
       </div>
     </div>
 
-
-    <!-- ========================================== -->
-    <!-- VIEW 1: CARDS MODERNOS (VISÃO CARDS)       -->
-    <!-- ========================================== -->
+    <!-- VIEW 1: CARTOES (DEFAULT) -->
     <section id="view-cards" class="transition-opacity duration-300">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <h3 class="text-base font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-grip text-cyan-400"></i> Visão Cartões Modernos (Cards)
-          </h3>
-          <p class="text-xs text-slate-400">Ideal para leitura rápida, redes sociais e visão geral dos salários e prazos.</p>
-        </div>
-        <span class="text-xs bg-slate-900 border border-slate-800 text-slate-400 px-2.5 py-1 rounded-md font-mono">Grid Dinâmico</span>
-      </div>
-
       <div id="cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        <!-- Rendered by JavaScript -->
+        <!-- Rendered by JS -->
       </div>
     </section>
 
-
-    <!-- ========================================== -->
-    <!-- VIEW 2: TABELA ANALÍTICA CORPORATIVA       -->
-    <!-- ========================================== -->
+    <!-- VIEW 2: TABELA ANALITICA -->
     <section id="view-table" class="hidden transition-opacity duration-300">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <h3 class="text-base font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-table-cells text-cyan-400"></i> Visão Tabela Analítica (Dashboard)
-          </h3>
-          <p class="text-xs text-slate-400">Comparação completa coluna por coluna, fiel à estrutura da planilha Excel original.</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <button onclick="exportCurrentToExcel()" class="text-xs bg-slate-900 border border-slate-700 hover:border-slate-500 text-slate-200 font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors">
-            <i class="fa-solid fa-file-excel text-emerald-400"></i> Exportar Dados Atualizados (.xlsx)
-          </button>
-        </div>
-      </div>
-
       <div class="bg-slate-900 border border-slate-800 rounded-xl shadow-xl overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs">
@@ -410,608 +240,131 @@
                 <th class="py-3 px-4">Banca</th>
                 <th class="py-3 px-4">Vagas (Imed. + CR)</th>
                 <th class="py-3 px-4 text-right">Remuneração Inicial</th>
-                <th class="py-3 px-4">Período de Inscrição</th>
-                <th class="py-3 px-4">Data da Prova</th>
-                <th class="py-3 px-4">Local da Prova</th>
+                <th class="py-3 px-4">Inscrições</th>
+                <th class="py-3 px-4">Data Prova</th>
+                <th class="py-3 px-4">Local</th>
                 <th class="py-3 px-4 text-center">Edital</th>
               </tr>
             </thead>
             <tbody id="table-container" class="divide-y divide-slate-800/60 text-slate-300">
-              <!-- Rendered by JavaScript -->
+              <!-- Rendered by JS -->
             </tbody>
           </table>
         </div>
       </div>
     </section>
 
-
-    <!-- ========================================== -->
-    <!-- VIEW 3: LINHA DO TEMPO (RADAR DE PRAZOS)   -->
-    <!-- ========================================== -->
+    <!-- VIEW 3: RADAR DE PRAZOS / CRONOGRAMA -->
     <section id="view-timeline" class="hidden transition-opacity duration-300">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <h3 class="text-base font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-clock text-cyan-400"></i> Cronograma & Radar de Deadlines
-          </h3>
-          <p class="text-xs text-slate-400">Agrupamento prioritário por proximidade do encerramento de inscrições e provas.</p>
-        </div>
-        <span class="text-xs bg-amber-950/40 text-amber-300 border border-amber-900/60 px-2.5 py-1 rounded-md font-mono">
-          <i class="fa-solid fa-stopwatch mr-1"></i> Foco em Prazos
-        </span>
-      </div>
-
       <div class="space-y-6" id="timeline-container">
-        <!-- Rendered by JavaScript -->
+        <!-- Rendered by JS -->
       </div>
     </section>
 
   </main>
 
-  <!-- MODAL: DETALHES DO CONCURSO (POPUP) -->
+  <!-- MODAL DE DETALHES DO CONCURSO -->
   <div id="detailsModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-800 relative">
       <button onclick="closeDetailsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-800 transition-colors">
         <i class="fa-solid fa-xmark text-lg"></i>
       </button>
-
-      <div id="modalContent">
-        <!-- Injected via JavaScript -->
-      </div>
+      <div id="modalContent"></div>
     </div>
   </div>
 
-  <!-- TOAST NOTIFICATION CONTAINER -->
-  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
-
   <!-- FOOTER -->
-  <footer class="bg-slate-900 border-t border-slate-800 py-6 mt-12 text-slate-500 text-xs">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-2">
-        <span class="font-bold text-slate-300">Concursos TI Hub</span> &copy; 2026 - Hub de Inteligência em Concursos de Tecnologia
+  <footer class="bg-slate-900 border-t border-slate-800 py-8 mt-12 text-slate-500 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+      <div>
+        <div class="font-bold text-slate-300 text-sm">Concurso e Molotov &bull; TI Público</div>
+        <p class="text-slate-500 mt-1">Transformando a gestão pública por meio da tecnologia e qualificação técnica.</p>
       </div>
-      <div class="flex items-center gap-4 text-slate-400">
-        <span>Parser SheetJS ativo no client-side</span>
-        <span>&bull;</span>
-        <button onclick="toggleDataDrawer()" class="text-cyan-400 hover:underline">Configurar Fonte de Dados</button>
+      <div class="text-slate-400 font-mono text-[11px]">
+        concursoemolotov.pro.br
       </div>
     </div>
   </footer>
 
-  <!-- DATA & PARSER SCRIPT -->
+  <!-- DATA LAYER SCRIPT -->
   <script>
-    // =========================================================================
-    // CONFIGURAÇÃO CENTRAL: URL DO SEU GOOGLE SHEETS
-    // =========================================================================
-    // Basta colar aqui o link da sua planilha publicado como CSV ou XLSX.
-    // Exemplo de URL de publicação:
-    // https://docs.google.com/spreadsheets/d/e/2PACX-1v.../pub?output=csv
-    const DEFAULT_GOOGLE_SHEETS_URL = ""; 
+    // URL DO ENDPOINT DE DADOS (Pode ser o arquivo estático dados.json no mesmo repositório)
+    const DATA_ENDPOINT = "dados.json";
 
-    // DATASET PADRÃO INICIAL (MOCK BASE PARA TESTES E DEMONSTRAÇÃO)
-    const SAMPLE_DATASET = [
+    // Dataset de contingência caso o dados.json ainda não tenha sido subido
+    const FALLBACK_DATASET = [
       {
-        ano: 2026,
-        status: "Inscrições Abertas",
-        concurso: "SERPRO",
-        banca: "Cebraspe",
-        inscricaoDe: "2026-10-15",
-        inscricoesAte: "2026-11-05",
-        cargo: "Analista de Tecnologia - Ciência de Dados & IA",
-        vagasImediatas: 180,
-        cr: 450,
-        localProva: "Nacional (Capitais)",
-        dataProva: "2026-12-14",
-        remuneracaoInicial: 11480.00,
-        edital: "https://www.cebraspe.org.br"
+        "id": 1,
+        "ano": 2026,
+        "status": "Inscrições Abertas",
+        "concurso": "SERPRO",
+        "banca": "Cebraspe",
+        "inscricaoDe": "2026-10-15",
+        "inscricoesAte": "2026-11-05",
+        "cargo": "Analista de Tecnologia - Ciência de Dados & IA",
+        "vagasImediatas": 180,
+        "cr": 450,
+        "localProva": "Nacional (Capitais)",
+        "dataProva": "2026-12-14",
+        "remuneracaoInicial": 11480.00,
+        "edital": "https://www.cebraspe.org.br"
       },
       {
-        ano: 2026,
-        status: "Inscrições Abertas",
-        concurso: "BNDES",
-        banca: "Cesgranrio",
-        inscricaoDe: "2026-10-10",
-        inscricoesAte: "2026-11-02",
-        cargo: "Especialista - Engenharia de Software & Cloud",
-        vagasImediatas: 95,
-        cr: 250,
-        localProva: "RJ, SP, DF, BH, REC, POA",
-        dataProva: "2026-12-21",
-        remuneracaoInicial: 20900.00,
-        edital: "https://www.cesgranrio.org.br"
+        "id": 2,
+        "ano": 2026,
+        "status": "Inscrições Abertas",
+        "concurso": "BNDES",
+        "banca": "Cesgranrio",
+        "inscricaoDe": "2026-10-10",
+        "inscricoesAte": "2026-11-02",
+        "cargo": "Especialista - Engenharia de Software & Cloud",
+        "vagasImediatas": 95,
+        "cr": 250,
+        "localProva": "RJ, SP, DF, BH, REC, POA",
+        "dataProva": "2026-12-21",
+        "remuneracaoInicial": 20900.00,
+        "edital": "https://www.cesgranrio.org.br"
       },
       {
-        ano: 2026,
-        status: "Previsto",
-        concurso: "BACEN",
-        banca: "Cebraspe",
-        inscricaoDe: "2026-12-01",
-        inscricoesAte: "2026-12-22",
-        cargo: "Analista do Banco Central - Tecnologia da Informação",
-        vagasImediatas: 100,
-        cr: 300,
-        localProva: "Brasília/DF e principais capitais",
-        dataProva: "2027-02-28",
-        remuneracaoInicial: 22436.50,
-        edital: "https://www.bcb.gov.br"
-      },
-      {
-        ano: 2026,
-        status: "Inscrições Abertas",
-        concurso: "DATAPREV",
-        banca: "FGV",
-        inscricaoDe: "2026-10-20",
-        inscricoesAte: "2026-11-18",
-        cargo: "Analista de TI - Infraestrutura, Redes e Cyber",
-        vagasImediatas: 210,
-        cr: 600,
-        localProva: "Nacional (Todas as Capitais)",
-        dataProva: "2027-01-18",
-        remuneracaoInicial: 9850.00,
-        edital: "https://conhecimento.fgv.br"
-      },
-      {
-        ano: 2026,
-        status: "Em Andamento",
-        concurso: "TCU",
-        banca: "FGV",
-        inscricaoDe: "2026-08-01",
-        inscricoesAte: "2026-08-25",
-        cargo: "Auditor Federal de Controle Externo - TI Governança",
-        vagasImediatas: 30,
-        cr: 90,
-        localProva: "Brasília/DF",
-        dataProva: "2026-11-15",
-        remuneracaoInicial: 24715.00,
-        edital: "https://portal.tcu.gov.br"
-      },
-      {
-        ano: 2026,
-        status: "Inscrições Abertas",
-        concurso: "TRT-2 (SP)",
-        banca: "FCC",
-        inscricaoDe: "2026-10-18",
-        inscricoesAte: "2026-11-12",
-        cargo: "Analista Judiciário - Apoio Especializado TI",
-        vagasImediatas: 15,
-        cr: 120,
-        localProva: "São Paulo/SP",
-        dataProva: "2026-12-14",
-        remuneracaoInicial: 16245.00,
-        edital: "https://www.concursosfcc.com.br"
-      },
-      {
-        ano: 2026,
-        status: "Previsto",
-        concurso: "MGI / CPUNU 2",
-        banca: "Cesgranrio",
-        inscricaoDe: "2027-01-10",
-        inscricoesAte: "2027-02-05",
-        cargo: "ATI - Analista em Tecnologia da Informação",
-        vagasImediatas: 300,
-        cr: 800,
-        localProva: "Mais de 220 municípios em todo o Brasil",
-        dataProva: "2027-04-12",
-        remuneracaoInicial: 13950.00,
-        edital: "https://www.gov.br/gestao"
-      },
-      {
-        ano: 2026,
-        status: "Encerrado",
-        concurso: "TJ-SP",
-        banca: "Vunesp",
-        inscricaoDe: "2026-06-10",
-        inscricoesAte: "2026-07-15",
-        cargo: "Analista de Sistemas - Desenvolvimento & Suporte",
-        vagasImediatas: 40,
-        cr: 150,
-        localProva: "São Paulo/SP e RAJs",
-        dataProva: "2026-09-20",
-        remuneracaoInicial: 8900.00,
-        edital: "https://www.vunesp.com.br"
+        "id": 3,
+        "ano": 2026,
+        "status": "Previsto",
+        "concurso": "BACEN",
+        "banca": "Cebraspe",
+        "inscricaoDe": "2026-12-01",
+        "inscricoesAte": "2026-12-22",
+        "cargo": "Analista do Banco Central - Tecnologia da Informação",
+        "vagasImediatas": 100,
+        "cr": 300,
+        "localProva": "Brasília/DF e capitais",
+        "dataProva": "2027-02-28",
+        "remuneracaoInicial": 22436.50,
+        "edital": "https://www.bcb.gov.br"
       }
     ];
 
-    // ESTADO GLOBAL DA APLICAÇÃO
     let rawDataset = [];
     let filteredList = [];
     let currentView = 'cards';
-    let currentDataSourceName = "Demonstração Integrada";
 
-    const STORAGE_KEY = 'concursos_ti_sheet_data';
-    const STORAGE_META_KEY = 'concursos_ti_sheet_meta';
-    const STORAGE_URL_KEY = 'concursos_ti_sheet_url';
-
-    // =========================================================================
-    // 1. PROCESSAMENTO E NORMALIZAÇÃO DE PLANILHA (SheetJS)
-    // =========================================================================
-    function handleFileSelect(event) {
-      const file = event.target.files[0];
-      if (file) {
-        readLocalFile(file);
-      }
-    }
-
-    function processWorkbookData(binaryData, fileName = "Planilha Carregada") {
+    async function loadData() {
       try {
-        const workbook = XLSX.read(binaryData, { type: 'binary', cellDates: true });
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-
-        if (!jsonData || jsonData.length === 0) {
-          showToast("A planilha carregada está vazia.", "warning");
-          return;
-        }
-
-        const normalized = jsonData.map((row, index) => mapRawRowToConcurso(row, index));
-        rawDataset = normalized;
-        currentDataSourceName = fileName;
-
-        saveToLocalStorage(rawDataset, currentDataSourceName);
-        updateSourceStatusUI(currentDataSourceName, rawDataset.length);
-        populateBancaFilterOptions(rawDataset);
-        applyFilters();
-
-        showToast(`Sucesso! ${rawDataset.length} concursos carregados de "${fileName}".`, "success");
-        toggleDataDrawer();
+        const response = await fetch(DATA_ENDPOINT + '?_t=' + Date.now());
+        if (!response.ok) throw new Error("Status " + response.status);
+        const data = await response.json();
+        rawDataset = Array.isArray(data) ? data : FALLBACK_DATASET;
       } catch (err) {
-        console.error("Erro ao processar planilha Excel:", err);
-        showToast("Falha ao ler o arquivo Excel. Verifique o formato.", "error");
-      }
-    }
-
-    function mapRawRowToConcurso(row, index) {
-      const normalizeKey = (k) => String(k || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-      const normalizedRow = {};
-      Object.keys(row).forEach(k => {
-        normalizedRow[normalizeKey(k)] = row[k];
-      });
-
-      const findVal = (possibleKeys, fallback = "") => {
-        for (const key of possibleKeys) {
-          const normK = normalizeKey(key);
-          if (normalizedRow[normK] !== undefined && normalizedRow[normK] !== null && normalizedRow[normK] !== "") {
-            return normalizedRow[normK];
-          }
-        }
-        return fallback;
-      };
-
-      const parseExcelDate = (val) => {
-        if (!val) return 'A definir';
-        if (val instanceof Date) {
-          return val.toISOString().slice(0, 10);
-        }
-        const str = String(val).trim();
-        if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
-        const brMatch = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-        if (brMatch) {
-          const dia = brMatch[1].padStart(2, '0');
-          const mes = brMatch[2].padStart(2, '0');
-          const ano = brMatch[3];
-          return `${ano}-${mes}-${dia}`;
-        }
-        return str;
-      };
-
-      const parseNumber = (val, fallback = 0) => {
-        if (typeof val === 'number') return val;
-        if (!val) return fallback;
-        const cleaned = String(val).replace(/[^\d.,]/g, '').replace(',', '.');
-        const num = parseFloat(cleaned);
-        return isNaN(num) ? fallback : num;
-      };
-
-      const anoVal = parseInt(findVal(['Ano', 'AnoEdital', 'Exercicio'], new Date().getFullYear()), 10);
-      const statusVal = String(findVal(['Status', 'Situacao', 'Fase'], 'Previsto')).trim();
-      const concursoVal = String(findVal(['Concurso', 'Orgao', 'Instituicao', 'Nome'], 'Concurso TI')).trim();
-      const bancaVal = String(findVal(['Banca', 'BancaOrganizadora', 'Organizadora'], 'A Definir')).trim();
-      const cargoVal = String(findVal(['Cargo', 'Especialidade', 'Area', 'Funcao'], 'Profissional de TI')).trim();
-      const vagasVal = Math.round(parseNumber(findVal(['VagasImediatas', 'Vagas', 'VagasAC', 'VagasGerais'], 0)));
-      const crVal = Math.round(parseNumber(findVal(['CadastroDeReserva', 'CadastroReserva', 'CR', 'Reserva'], 0)));
-      const remuneracaoVal = parseNumber(findVal(['RemuneracaoInicialDaCarreira', 'RemuneracaoInicial', 'Remuneracao', 'Salario', 'Vencimento', 'SalarioInicial'], 0));
-      const inscricaoDeVal = parseExcelDate(findVal(['InscricaoDe', 'InicioDasInscricoes', 'InscricoesInicio', 'AberturaInscricoes']));
-      const inscricoesAteVal = parseExcelDate(findVal(['InscricoesAte', 'FimDasInscricoes', 'InscricoesFim', 'TerminoInscricoes', 'LimiteInscricao']));
-      const dataProvaVal = parseExcelDate(findVal(['DataDaProva', 'DataProva', 'ProvaData', 'AplicacaoProva']));
-      const localProvaVal = String(findVal(['LocalDeProva', 'LocalProva', 'Local', 'CidadesDeProva', 'UF', 'Locais'], 'Nacional')).trim();
-      const editalVal = String(findVal(['Edital', 'LinkDoEdital', 'Link', 'URL', 'LinkEdital'], '#')).trim();
-      const notasVal = String(findVal(['Anotacoes', 'Notas', 'Destaques', 'Observacoes'], '')).trim();
-
-      return {
-        id: row.id ? Number(row.id) : (Date.now() + index),
-        ano: anoVal,
-        status: statusVal,
-        concurso: concursoVal,
-        banca: bancaVal,
-        inscricaoDe: inscricaoDeVal,
-        inscricoesAte: inscricoesAteVal,
-        cargo: cargoVal,
-        vagasImediatas: vagasVal,
-        cr: crVal,
-        localProva: localProvaVal,
-        dataProva: dataProvaVal,
-        remuneracaoInicial: remuneracaoVal,
-        edital: editalVal,
-        notas: notasVal
-      };
-    }
-
-    function readLocalFile(file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const data = e.target.result;
-        processWorkbookData(data, file.name);
-      };
-      reader.readAsBinaryString(file);
-    }
-
-    // Drag and drop handlers
-    function handleDragOver(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      document.getElementById('dropZone').classList.add('drag-active');
-    }
-
-    function handleDragLeave(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      document.getElementById('dropZone').classList.remove('drag-active');
-    }
-
-    function handleDrop(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      document.getElementById('dropZone').classList.remove('drag-active');
-      const dt = e.dataTransfer;
-      const file = dt.files[0];
-      if (file) {
-        readLocalFile(file);
-      }
-    }
-
-    // Sincronização via URL Remota (Google Sheets / Link público)
-    async function syncRemoteSheet(isManual = false) {
-      const urlInput = document.getElementById('remoteSheetUrl');
-      let url = (urlInput.value || '').trim() || DEFAULT_GOOGLE_SHEETS_URL.trim();
-
-      if (!url) {
-        if (isManual) {
-          showToast("Insira o link da sua planilha pública do Google Sheets ou configure a variável DEFAULT_GOOGLE_SHEETS_URL.", "warning");
-        }
-        return false;
+        console.warn("Lendo base de contingência local:", err);
+        rawDataset = FALLBACK_DATASET;
       }
 
-      // Se inseriram o link de compartilhamento normal /edit, transforma para export direto
-      if (url.includes('docs.google.com/spreadsheets') && !url.includes('/pub') && !url.includes('export?format=')) {
-        if (url.includes('/edit')) {
-          url = url.split('/edit')[0] + '/export?format=csv';
-        } else {
-          url = url.replace(/\/$/, '') + '/export?format=csv';
-        }
-      }
-
-      // Atualiza o input com o link normalizado
-      urlInput.value = url;
-
-      const syncBtn = document.getElementById('btnSyncRemote');
-      const quickRefreshIcon = document.getElementById('btnQuickRefreshIcon');
-      if (quickRefreshIcon) quickRefreshIcon.classList.add('fa-spin');
-      const originalText = syncBtn ? syncBtn.innerHTML : '';
-      if (syncBtn) {
-        syncBtn.disabled = true;
-        syncBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sincronizando...`;
-      }
-
-      document.getElementById('syncStatusMessage').innerText = "Buscando dados atualizados do Google Sheets...";
-
-      try {
-        // Usa timestamp anti-cache para garantir dados em tempo real
-        const fetchUrl = url + (url.includes('?') ? '&' : '?') + `_t=${Date.now()}`;
-        const response = await fetch(fetchUrl);
-        if (!response.ok) throw new Error(`HTTP ${response.status} - Falha ao baixar dados da planilha`);
-        
-        const blob = await response.blob();
-        const reader = new FileReader();
-        
-        return new Promise((resolve) => {
-          reader.onload = function(e) {
-            const data = e.target.result;
-            processWorkbookData(data, "Google Sheets (Live Sync)");
-            localStorage.setItem(STORAGE_URL_KEY, url);
-            
-            if (syncBtn) {
-              syncBtn.disabled = false;
-              syncBtn.innerHTML = originalText;
-            }
-            if (quickRefreshIcon) quickRefreshIcon.classList.remove('fa-spin');
-            if (isManual) {
-              showToast("Dados atualizados com sucesso diretamente do Google Sheets!", "success");
-            }
-            resolve(true);
-          };
-          reader.onerror = function() {
-            throw new Error("Erro na leitura binária do arquivo retornado.");
-          };
-          reader.readAsBinaryString(blob);
-        });
-
-      } catch (err) {
-        console.warn("Falha ao sincronizar URL remota:", err);
-        if (syncBtn) {
-          syncBtn.disabled = false;
-          syncBtn.innerHTML = originalText;
-        }
-        if (quickRefreshIcon) quickRefreshIcon.classList.remove('fa-spin');
-        
-        if (isManual) {
-          showToast("Não foi possível carregar a planilha. Verifique se ela foi publicada na web em 'Arquivo > Compartilhar > Publicar na Web' como CSV.", "error");
-        }
-        return false;
-      }
-    }
-
-    // =========================================================================
-    // 3. STORAGE & RECOVERY (Persistência Local)
-    // =========================================================================
-    function saveToLocalStorage(data, sourceName) {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        localStorage.setItem(STORAGE_META_KEY, JSON.stringify({
-          sourceName: sourceName,
-          updatedAt: new Date().toISOString()
-        }));
-      } catch (e) {
-        console.warn("LocalStorage lotado ou indisponível:", e);
-      }
-    }
-
-    function loadFromLocalStorage() {
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        const meta = localStorage.getItem(STORAGE_META_KEY);
-        const savedUrl = localStorage.getItem(STORAGE_URL_KEY);
-
-        if (savedUrl) {
-          document.getElementById('remoteSheetUrl').value = savedUrl;
-        }
-
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          const metaParsed = meta ? JSON.parse(meta) : { sourceName: "Planilha Salva" };
-          rawDataset = parsed;
-          currentDataSourceName = metaParsed.sourceName;
-          updateSourceStatusUI(currentDataSourceName, rawDataset.length);
-          populateBancaFilterOptions(rawDataset);
-          applyFilters();
-          return true;
-        }
-      } catch (e) {
-        console.warn("Erro ao ler localStorage:", e);
-      }
-      return false;
-    }
-
-    function clearStoredData() {
-      localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem(STORAGE_META_KEY);
-      localStorage.removeItem(STORAGE_URL_KEY);
-      document.getElementById('remoteSheetUrl').value = '';
-      loadSampleDataset();
-      showToast("Dados salvos no cache foram apagados. Restaurado modelo de demonstração.", "info");
-    }
-
-    function loadSampleDataset() {
-      rawDataset = [...SAMPLE_DATASET];
-      currentDataSourceName = "Demonstração (8 Editais TI)";
-      updateSourceStatusUI(currentDataSourceName, rawDataset.length);
       populateBancaFilterOptions(rawDataset);
       applyFilters();
-      showToast("Dados padrão de exemplo carregados.", "info");
+
+      // Atualiza métrica do topo
+      const totalVagas = rawDataset.reduce((acc, curr) => acc + (curr.vagasImediatas || 0), 0);
+      document.getElementById('headerTotalVagas').innerText = totalVagas.toLocaleString('pt-BR');
     }
-
-    function updateSourceStatusUI(sourceName, count) {
-      document.getElementById('sourceLabelText').innerText = `${sourceName} (${count})`;
-      document.getElementById('activeDatasetTag').innerText = sourceName;
-      document.getElementById('validRowsCount').innerText = count;
-      document.getElementById('syncStatusMessage').innerText = `Fonte ativa: ${sourceName} - Sincronizada com sucesso.`;
-      document.getElementById('storageTypeBadge').innerText = sourceName.includes('Demonstração') ? 'Demonstração' : 'Planilha Carregada';
-    }
-
-    // =========================================================================
-    // 4. TEMPLATE EXCEL & EXPORTAÇÃO (.xlsx)
-    // =========================================================================
-    function downloadExcelTemplate() {
-      const templateData = [
-        {
-          "Ano": 2026,
-          "Status": "Inscrições Abertas",
-          "Concurso": "SERPRO",
-          "Banca": "Cebraspe",
-          "Inscrição de": "2026-10-15",
-          "Inscrições até": "2026-11-05",
-          "Cargo": "Analista de Tecnologia - Especialidade IA e Dados",
-          "Vagas Imediatas": 180,
-          "Cadastro de Reserva (CR)": 450,
-          "Local de Prova": "Brasília, SP, RJ, BH, Curitiba e Recife",
-          "Data da Prova": "2026-12-14",
-          "Remuneração Inicial da Carreira": 11480.00,
-          "Edital": "https://www.cebraspe.org.br",
-          "Anotações": "Foco em Python, MLOps e Big Data"
-        }
-      ];
-
-      const ws = XLSX.utils.json_to_sheet(templateData);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Concursos TI");
-      XLSX.writeFile(wb, "Modelo_Concursos_TI.xlsx");
-      showToast("Download do template 'Modelo_Concursos_TI.xlsx' iniciado!", "success");
-    }
-
-    // Exporta toda a base atual (incluindo edições e criações manuais)
-    function exportCurrentToExcel() {
-      if (!rawDataset || rawDataset.length === 0) {
-        showToast("Não há concursos cadastrados para exportar.", "warning");
-        return;
-      }
-
-      const exportRows = rawDataset.map(item => ({
-        "Ano": item.ano,
-        "Status": item.status,
-        "Concurso": item.concurso,
-        "Cargo": item.cargo,
-        "Banca": item.banca,
-        "Vagas Imediatas": item.vagasImediatas,
-        "Cadastro de Reserva (CR)": item.cr,
-        "Remuneração Inicial da Carreira": item.remuneracaoInicial,
-        "Inscrição de": item.inscricaoDe,
-        "Inscrições até": item.inscricoesAte,
-        "Data da Prova": item.dataProva,
-        "Local de Prova": item.localProva,
-        "Edital": item.edital,
-        "Anotações": item.notas || ""
-      }));
-
-      const ws = XLSX.utils.json_to_sheet(exportRows);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Concursos TI");
-      
-      const fileName = `Concursos_TI_Atualizado_${new Date().toISOString().slice(0,10)}.xlsx`;
-      XLSX.writeFile(wb, fileName);
-      showToast(`Planilha "${fileName}" exportada com sucesso!`, "success");
-    }
-
-    function downloadCurrentFilteredAsExcel() {
-      if (filteredList.length === 0) {
-        showToast("Nenhum concurso filtrado para exportar.", "warning");
-        return;
-      }
-      const exportRows = filteredList.map(item => ({
-        "Ano": item.ano,
-        "Status": item.status,
-        "Concurso": item.concurso,
-        "Cargo": item.cargo,
-        "Banca": item.banca,
-        "Vagas Imediatas": item.vagasImediatas,
-        "Cadastro de Reserva (CR)": item.cr,
-        "Remuneração Inicial": item.remuneracaoInicial,
-        "Inscrição de": formatDate(item.inscricaoDe),
-        "Inscrições até": formatDate(item.inscricoesAte),
-        "Data da Prova": formatDate(item.dataProva),
-        "Local de Prova": item.localProva,
-        "Link Edital": item.edital
-      }));
-
-      const ws = XLSX.utils.json_to_sheet(exportRows);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Concursos Filtrados");
-      XLSX.writeFile(wb, `Concursos_TI_${new Date().toISOString().slice(0,10)}.xlsx`);
-      showToast("Exportação gerada com sucesso!", "success");
-    }
-
-    // =========================================================================
-    // 5. RENDERIZADORES DE LAYOUTS (CARDS, TABELA, CRONOGRAMA)
-    // =========================================================================
 
     function formatCurrency(val) {
       return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val || 0);
@@ -1040,42 +393,13 @@
           return `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-950 text-blue-300 border border-blue-800">
                     <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> Em Andamento
                   </span>`;
-        case 'Encerrado':
-          return `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-800 text-slate-400 border border-slate-700">
-                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Encerrado
-                  </span>`;
         default:
-          return `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-800 text-slate-300">${status}</span>`;
+          return `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-800 text-slate-400 border border-slate-700">
+                    ${status}
+                  </span>`;
       }
     }
 
-    function getDeadlineBadge(status, ateStr) {
-      if (status === 'Encerrado') {
-        return `<span class="text-[11px] font-semibold text-slate-500 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-md block">
-                  <i class="fa-solid fa-lock mr-1.5"></i>Inscrições Finalizadas
-                </span>`;
-      }
-      if (status === 'Previsto') {
-        return `<span class="text-[11px] font-semibold text-amber-300 bg-amber-950/40 border border-amber-900/60 px-2.5 py-1 rounded-md block">
-                  <i class="fa-regular fa-calendar-check mr-1.5"></i>Aguardando Publicação de Edital
-                </span>`;
-      }
-      if (status === 'Em Andamento') {
-        return `<span class="text-[11px] font-semibold text-blue-300 bg-blue-950/40 border border-blue-900/60 px-2.5 py-1 rounded-md block">
-                  <i class="fa-solid fa-spinner mr-1.5"></i>Em fase de Provas / Homologação
-                </span>`;
-      }
-
-      if (!ateStr || ateStr === 'A definir') {
-        return `<span class="text-[11px] font-semibold text-slate-400 bg-slate-900 px-2.5 py-1 rounded-md block">Prazo a definir</span>`;
-      }
-
-      return `<span class="text-[11px] font-semibold text-emerald-300 bg-emerald-950/40 border border-emerald-800 px-2.5 py-1 rounded-md block">
-                <i class="fa-regular fa-clock mr-1.5"></i>Inscrições até ${formatDate(ateStr)}
-              </span>`;
-    }
-
-    // 1. CARDS VIEW
     function renderCards(list) {
       const container = document.getElementById('cards-container');
       if (list.length === 0) {
@@ -1088,26 +412,19 @@
           <div class="p-5 pb-3">
             <div class="flex items-start justify-between gap-2 mb-3">
               ${getStatusBadge(item.status)}
-              
-              <!-- Ações Rápidas no Card -->
-              <div class="flex items-center gap-1.5">
-                <span class="text-xs font-mono font-semibold text-slate-400 bg-slate-950 border border-slate-800 px-2 py-0.5 rounded">
-                  ${item.ano}
-                </span>
-              </div>
+              <span class="text-xs font-mono font-semibold text-slate-400 bg-slate-950 border border-slate-800 px-2 py-0.5 rounded">
+                ${item.ano}
+              </span>
             </div>
 
-            <!-- Título Concurso -->
             <h4 class="text-lg font-extrabold text-white group-hover:text-cyan-400 transition-colors mb-1 truncate" title="${item.concurso}">
               ${item.concurso}
             </h4>
 
-            <!-- Cargo TI -->
             <p class="text-xs font-semibold text-cyan-300 bg-cyan-950/60 border border-cyan-800/60 rounded-lg p-2.5 mb-3 line-clamp-2" title="${item.cargo}">
               <i class="fa-solid fa-code text-cyan-400 mr-1.5"></i> ${item.cargo}
             </p>
 
-            <!-- Remuneração Destaque -->
             <div class="bg-gradient-to-r from-emerald-950/60 via-emerald-950/20 to-transparent border-l-4 border-emerald-500 p-2.5 rounded-r-lg mb-3">
               <span class="text-[10px] uppercase font-bold text-emerald-400 tracking-wider block">Remuneração Inicial</span>
               <div class="text-xl font-extrabold text-emerald-400 font-mono">
@@ -1115,7 +432,6 @@
               </div>
             </div>
 
-            <!-- Vagas Grid -->
             <div class="grid grid-cols-2 gap-2 text-xs py-2 border-y border-slate-800 text-slate-300 mb-3">
               <div>
                 <span class="text-slate-500 block text-[10px] font-bold">VAGAS IMEDIATAS</span>
@@ -1127,53 +443,38 @@
               </div>
             </div>
 
-            <!-- Meta: Banca, Local, Prova -->
             <ul class="space-y-1.5 text-xs text-slate-300">
               <li class="flex items-center justify-between">
-                <span class="text-slate-500"><i class="fa-solid fa-building-columns w-4 text-slate-500"></i> Banca:</span>
+                <span class="text-slate-500"><i class="fa-solid fa-building-columns w-4"></i> Banca:</span>
                 <span class="font-semibold text-slate-200">${item.banca}</span>
               </li>
               <li class="flex items-center justify-between">
-                <span class="text-slate-500"><i class="fa-solid fa-location-dot w-4 text-slate-500"></i> Local Prova:</span>
+                <span class="text-slate-500"><i class="fa-solid fa-location-dot w-4"></i> Local:</span>
                 <span class="font-medium text-slate-300 text-right truncate max-w-[170px]" title="${item.localProva}">${item.localProva}</span>
               </li>
               <li class="flex items-center justify-between">
-                <span class="text-slate-500"><i class="fa-solid fa-calendar-day w-4 text-slate-500"></i> Data Prova:</span>
+                <span class="text-slate-500"><i class="fa-solid fa-calendar-day w-4"></i> Prova:</span>
                 <span class="font-semibold text-slate-200 font-mono">${formatDate(item.dataProva)}</span>
               </li>
             </ul>
           </div>
 
-          <!-- Bottom Actions -->
-          <div class="bg-slate-950/80 px-5 py-3 border-t border-slate-800/80 mt-2">
-            <div class="mb-3">
-              ${getDeadlineBadge(item.status, item.inscricoesAte)}
-            </div>
-            
-            <div class="flex items-center gap-2">
-              <button onclick="openDetailsModal(${item.id})" class="flex-1 text-center py-2 px-3 rounded-lg border border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold text-xs transition-colors">
-                <i class="fa-solid fa-circle-info mr-1"></i> Detalhes
-              </button>
-              <a href="${item.edital}" target="_blank" class="flex-1 text-center py-2 px-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs transition-colors flex items-center justify-center gap-1.5 shadow-md">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> Edital
-              </a>
-            </div>
+          <div class="bg-slate-950/80 px-5 py-3 border-t border-slate-800/80 mt-2 flex items-center gap-2">
+            <button onclick="openDetailsModal(${item.id})" class="flex-1 text-center py-2 px-3 rounded-lg border border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold text-xs transition-colors">
+              <i class="fa-solid fa-circle-info mr-1"></i> Detalhes
+            </button>
+            <a href="${item.edital}" target="_blank" class="flex-1 text-center py-2 px-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs transition-colors flex items-center justify-center gap-1.5 shadow-md">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Edital
+            </a>
           </div>
         </div>
       `).join('');
     }
 
-    // 2. TABELA VIEW
     function renderTable(list) {
       const container = document.getElementById('table-container');
-      const tableAdminHeader = document.querySelector('.table-admin-col');
-      if (tableAdminHeader) {
-        if (isAdminMode) tableAdminHeader.classList.remove('hidden');
-        else tableAdminHeader.classList.add('hidden');
-      }
-
       if (list.length === 0) {
-        container.innerHTML = `<tr><td colspan="${isAdminMode ? 12 : 11}" class="py-8 text-center text-slate-500 text-xs">${getEmptyState()}</td></tr>`;
+        container.innerHTML = `<tr><td colspan="11" class="py-8 text-center text-slate-500 text-xs">${getEmptyState()}</td></tr>`;
         return;
       }
 
@@ -1182,19 +483,17 @@
           <td class="py-3 px-4 whitespace-nowrap">${getStatusBadge(item.status)}</td>
           <td class="py-3 px-4 font-mono font-bold text-slate-500">${item.ano}</td>
           <td class="py-3 px-4 font-bold text-white whitespace-nowrap">${item.concurso}</td>
-          <td class="py-3 px-4">
-            <div class="font-medium text-slate-200 max-w-[220px] truncate" title="${item.cargo}">${item.cargo}</div>
-          </td>
+          <td class="py-3 px-4"><div class="font-medium text-slate-200 max-w-[220px] truncate" title="${item.cargo}">${item.cargo}</div></td>
           <td class="py-3 px-4 font-semibold text-slate-300 whitespace-nowrap">${item.banca}</td>
           <td class="py-3 px-4 whitespace-nowrap">
             <span class="font-bold text-white font-mono">${item.vagasImediatas}</span>
-            <span class="text-slate-500 text-[10px]"> (+${item.cr} CR)</span>
+            <span class="text-slate-500 text-[10px]"> (+${item.cr})</span>
           </td>
           <td class="py-3 px-4 text-right font-mono font-bold text-emerald-400 whitespace-nowrap">
             ${formatCurrency(item.remuneracaoInicial)}
           </td>
           <td class="py-3 px-4 whitespace-nowrap text-[11px]">
-            <span class="text-slate-400 font-mono">${formatDate(item.inscricaoDe)}</span> <span class="text-slate-600">à</span> <span class="font-semibold text-slate-200 font-mono">${formatDate(item.inscricoesAte)}</span>
+            <span class="text-slate-400 font-mono">${formatDate(item.inscricaoDe)}</span> &rarr; <span class="font-semibold text-slate-200 font-mono">${formatDate(item.inscricoesAte)}</span>
           </td>
           <td class="py-3 px-4 whitespace-nowrap font-medium text-slate-200 font-mono">${formatDate(item.dataProva)}</td>
           <td class="py-3 px-4 text-[11px] text-slate-300 truncate max-w-[120px]" title="${item.localProva}">${item.localProva}</td>
@@ -1207,7 +506,6 @@
       `).join('');
     }
 
-    // 3. TIMELINE VIEW
     function renderTimeline(list) {
       const container = document.getElementById('timeline-container');
       if (list.length === 0) {
@@ -1217,34 +515,27 @@
 
       const groups = [
         {
-          title: "Inscrições Abertas / Urgência Máxima",
-          desc: "Editais com recebimento de inscrições em aberto",
+          title: "Inscrições Abertas / Atenção Imediata",
+          desc: "Editais recebendo inscrições neste momento",
           icon: "fa-solid fa-fire text-amber-400",
           items: list.filter(c => c.status === "Inscrições Abertas")
         },
         {
-          title: "Em Andamento / Fase de Provas",
-          desc: "Concursos com inscrições finalizadas, aguardando aplicação das provas",
+          title: "Fase de Provas / Em Andamento",
+          desc: "Inscrições encerradas, aguardando provas ou resultados",
           icon: "fa-solid fa-bullseye text-cyan-400",
           items: list.filter(c => c.status === "Em Andamento")
         },
         {
           title: "Radar de Previstos & Autorizados",
-          desc: "Banca em definição ou contratação confirmada",
+          desc: "Editais iminentes ou com banca organizadora em definição",
           icon: "fa-solid fa-binoculars text-indigo-400",
           items: list.filter(c => c.status === "Previsto")
-        },
-        {
-          title: "Histórico / Concluídos",
-          desc: "Editais passados para referência e estudo de pontuação",
-          icon: "fa-solid fa-circle-check text-slate-500",
-          items: list.filter(c => c.status === "Encerrado")
         }
       ];
 
       container.innerHTML = groups.map(group => {
         if (group.items.length === 0) return '';
-
         return `
           <div class="bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-sm">
             <div class="flex items-center gap-2.5 pb-3 mb-4 border-b border-slate-800">
@@ -1258,40 +549,30 @@
             <div class="space-y-3">
               ${group.items.map(item => `
                 <div class="flex flex-col md:flex-row md:items-center justify-between p-3.5 rounded-xl border border-slate-800 bg-slate-950/60 hover:border-slate-700 transition-all gap-4">
-                  <div class="flex items-start gap-3">
-                    <div class="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 text-cyan-400 flex flex-col items-center justify-center font-mono shrink-0 shadow-sm">
-                      <span class="text-[9px] uppercase tracking-wider text-slate-500 font-sans">Banca</span>
-                      <span class="text-xs font-bold leading-none">${item.banca}</span>
+                  <div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <span class="text-base font-bold text-white">${item.concurso}</span>
+                      ${getStatusBadge(item.status)}
+                      <span class="text-xs font-mono font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800">
+                        ${formatCurrency(item.remuneracaoInicial)}
+                      </span>
                     </div>
-                    <div>
-                      <div class="flex items-center gap-2 flex-wrap">
-                        <span class="text-base font-bold text-white">${item.concurso}</span>
-                        ${getStatusBadge(item.status)}
-                        <span class="text-xs font-mono font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800">
-                          ${formatCurrency(item.remuneracaoInicial)}
-                        </span>
-                      </div>
-                      <p class="text-xs font-medium text-slate-300 mt-0.5">${item.cargo}</p>
-                      <div class="flex items-center gap-4 text-xs text-slate-400 mt-1.5 flex-wrap">
-                        <span><i class="fa-solid fa-users text-slate-500 mr-1"></i> ${item.vagasImediatas} vagas (+${item.cr} CR)</span>
-                        <span><i class="fa-solid fa-location-dot text-slate-500 mr-1"></i> ${item.localProva}</span>
-                      </div>
+                    <p class="text-xs font-medium text-slate-300 mt-1">${item.cargo}</p>
+                    <div class="flex items-center gap-4 text-xs text-slate-400 mt-2 flex-wrap">
+                      <span><i class="fa-solid fa-building-columns mr-1"></i> Banca: <strong>${item.banca}</strong></span>
+                      <span><i class="fa-solid fa-users mr-1"></i> ${item.vagasImediatas} vagas (+${item.cr} CR)</span>
+                      <span><i class="fa-solid fa-location-dot mr-1"></i> ${item.localProva}</span>
                     </div>
                   </div>
 
                   <div class="flex md:flex-col items-center md:items-end justify-between md:justify-center border-t md:border-t-0 pt-2 md:pt-0 border-slate-800 gap-2 shrink-0">
                     <div class="text-right">
-                      <span class="text-[10px] text-slate-500 block uppercase font-bold">Data da Prova</span>
+                      <span class="text-[10px] text-slate-500 uppercase font-bold block">Data da Prova</span>
                       <span class="text-xs font-bold text-slate-200 font-mono">${formatDate(item.dataProva)}</span>
                     </div>
-                    <div class="flex items-center gap-2">
-                      <button onclick="openDetailsModal(${item.id})" class="text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 font-semibold text-slate-300 transition-colors">
-                        Ficha
-                      </button>
-                      <a href="${item.edital}" target="_blank" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold transition-colors flex items-center gap-1">
-                        <i class="fa-solid fa-file-lines"></i> Edital
-                      </a>
-                    </div>
+                    <a href="${item.edital}" target="_blank" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold transition-colors flex items-center gap-1">
+                      <i class="fa-solid fa-file-lines"></i> Edital
+                    </a>
                   </div>
                 </div>
               `).join('')}
@@ -1307,28 +588,17 @@
           <div class="w-12 h-12 bg-slate-900 border border-slate-800 rounded-full flex items-center justify-center mx-auto text-slate-500 mb-3">
             <i class="fa-solid fa-filter-circle-xmark text-lg"></i>
           </div>
-          <h4 class="text-sm font-bold text-slate-300">Nenhum concurso encontrado</h4>
-          <p class="text-xs text-slate-500 mt-1">Ajuste os filtros de busca ou suba uma planilha com novos dados.</p>
-          <button onclick="resetFilters()" class="mt-3 px-3 py-1.5 bg-cyan-600 text-slate-950 rounded-lg text-xs font-bold">Limpar Filtros</button>
+          <h4 class="text-sm font-bold text-slate-300">Nenhum concurso localizado</h4>
+          <p class="text-xs text-slate-500 mt-1">Experimente remover os filtros de busca para ver todos os editais.</p>
         </div>
       `;
     }
 
-    // =========================================================================
-    // 6. CONTROLE DE FILTROS E VISUALIZAÇÕES
-    // =========================================================================
-
     function populateBancaFilterOptions(data) {
       const bancaSelect = document.getElementById('filterBanca');
-      const currentSelected = bancaSelect.value;
-      
       const bancas = Array.from(new Set(data.map(d => d.banca).filter(Boolean))).sort();
       bancaSelect.innerHTML = `<option value="ALL">Banca (Todas)</option>` + 
         bancas.map(b => `<option value="${b}">${b}</option>`).join('');
-
-      if (bancas.includes(currentSelected)) {
-        bancaSelect.value = currentSelected;
-      }
     }
 
     function switchView(viewName) {
@@ -1369,7 +639,6 @@
         return matchesSearch && matchesStatus && matchesBanca && matchesRem;
       });
 
-      // Atualiza contadores
       document.getElementById('count-visible').innerText = filteredList.length;
       const totalVagas = filteredList.reduce((acc, curr) => acc + (curr.vagasImediatas || 0), 0);
       document.getElementById('totalVagasSum').innerText = totalVagas.toLocaleString('pt-BR');
@@ -1391,16 +660,11 @@
       if (currentView === 'timeline') renderTimeline(filteredList);
     }
 
-    // =========================================================================
-    // 7. MODAL DE DETALHES & UTILITÁRIOS
-    // =========================================================================
-
     function openDetailsModal(id) {
       const item = rawDataset.find(c => c.id === id);
       if (!item) return;
 
-      const modalContent = document.getElementById('modalContent');
-      modalContent.innerHTML = `
+      document.getElementById('modalContent').innerHTML = `
         <div class="flex items-start justify-between gap-3 mb-3">
           <div>
             <div class="flex items-center gap-2 mb-1">
@@ -1412,7 +676,7 @@
         </div>
 
         <div class="bg-cyan-950/40 border border-cyan-800/60 rounded-xl p-3 mb-4">
-          <span class="text-[10px] uppercase font-bold text-cyan-400 block tracking-wider">Cargo & Área</span>
+          <span class="text-[10px] uppercase font-bold text-cyan-400 block tracking-wider">Cargo & Especialidade</span>
           <span class="text-sm font-bold text-slate-100">${item.cargo}</span>
         </div>
 
@@ -1422,30 +686,30 @@
             <span class="font-bold text-emerald-400 font-mono text-sm">${formatCurrency(item.remuneracaoInicial)}</span>
           </div>
           <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800">
-            <span class="text-slate-500 block text-[10px]">VAGAS IMEDIATAS</span>
+            <span class="text-slate-500 block text-[10px]">VAGAS</span>
             <span class="font-bold text-white text-sm font-mono">${item.vagasImediatas}</span>
           </div>
           <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800">
-            <span class="text-slate-500 block text-[10px]">CADASTRO RESERVA</span>
+            <span class="text-slate-500 block text-[10px]">CR</span>
             <span class="font-bold text-slate-400 text-sm font-mono">${item.cr}</span>
           </div>
         </div>
 
         <div class="space-y-2 text-xs border-t border-slate-800 pt-3 mb-4">
           <div class="flex justify-between py-1 border-b border-slate-800/40">
-            <span class="text-slate-400 font-medium">Banca Organizadora:</span>
+            <span class="text-slate-400">Banca Organizadora:</span>
             <span class="font-bold text-slate-200">${item.banca}</span>
           </div>
           <div class="flex justify-between py-1 border-b border-slate-800/40">
-            <span class="text-slate-400 font-medium">Período de Inscrição:</span>
+            <span class="text-slate-400">Inscrições:</span>
             <span class="font-bold text-slate-200 font-mono">${formatDate(item.inscricaoDe)} até ${formatDate(item.inscricoesAte)}</span>
           </div>
           <div class="flex justify-between py-1 border-b border-slate-800/40">
-            <span class="text-slate-400 font-medium">Data da Prova:</span>
+            <span class="text-slate-400">Data da Prova:</span>
             <span class="font-bold text-slate-200 font-mono">${formatDate(item.dataProva)}</span>
           </div>
           <div class="flex justify-between py-1">
-            <span class="text-slate-400 font-medium">Local de Prova:</span>
+            <span class="text-slate-400">Local de Prova:</span>
             <span class="font-bold text-slate-200 text-right">${item.localProva}</span>
           </div>
         </div>
@@ -1454,8 +718,8 @@
           <button onclick="closeDetailsModal()" class="flex-1 py-2.5 px-4 rounded-xl border border-slate-700 text-slate-300 font-semibold text-xs hover:bg-slate-800 transition-colors">
             Fechar
           </button>
-          <a href="${item.edital}" target="_blank" class="flex-1 py-2.5 px-4 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs text-center shadow-lg shadow-cyan-950/50 transition-all flex items-center justify-center gap-2">
-            <i class="fa-solid fa-file-pdf"></i> Edital Oficial
+          <a href="${item.edital}" target="_blank" class="flex-1 py-2.5 px-4 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs text-center shadow-lg transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Edital
           </a>
         </div>
       `;
@@ -1467,60 +731,12 @@
       document.getElementById('detailsModal').classList.add('hidden');
     }
 
-    function toggleDataDrawer() {
-      const drawer = document.getElementById('dataDrawer');
-      drawer.classList.toggle('hidden');
-    }
-
-    function showToast(message, type = "info") {
-      const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      
-      let border = "border-cyan-500";
-      let icon = "fa-circle-info text-cyan-400";
-      if (type === "success") { border = "border-emerald-500"; icon = "fa-circle-check text-emerald-400"; }
-      if (type === "warning") { border = "border-amber-500"; icon = "fa-triangle-exclamation text-amber-400"; }
-      if (type === "error") { border = "border-rose-500"; icon = "fa-circle-xmark text-rose-400"; }
-
-      toast.className = `pointer-events-auto bg-slate-900 text-slate-200 text-xs font-medium px-4 py-3 rounded-xl shadow-2xl border ${border} flex items-center gap-2.5 transition-all transform translate-y-2 opacity-0`;
-      toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
-      
-      container.appendChild(toast);
-      
-      setTimeout(() => {
-        toast.classList.remove('translate-y-2', 'opacity-0');
-      }, 50);
-
-      setTimeout(() => {
-        toast.classList.add('opacity-0', 'translate-x-4');
-        setTimeout(() => toast.remove(), 300);
-      }, 4500);
-    }
-
-    // Fecha modais clicando fora
     window.addEventListener('click', function(e) {
-      const detModal = document.getElementById('detailsModal');
-
-      if (e.target === detModal) closeDetailsModal();
+      if (e.target === document.getElementById('detailsModal')) closeDetailsModal();
     });
 
-    // INICIALIZAÇÃO
-    window.onload = async function() {
-      // 1. Tenta carregar dados salvos no cache local para renderização imediata sem flash
-      const hasStored = loadFromLocalStorage();
-      if (!hasStored) {
-        loadSampleDataset();
-      }
-
-      // 2. Se houver URL do Google Sheets configurada ou salva, sincroniza em segundo plano
-      const activeUrl = DEFAULT_GOOGLE_SHEETS_URL || localStorage.getItem(STORAGE_URL_KEY);
-      if (activeUrl) {
-        document.getElementById('remoteSheetUrl').value = activeUrl;
-        const synced = await syncRemoteSheet(false);
-        if (synced) {
-          console.log("Dados sincronizados com o Google Sheets com sucesso na inicialização.");
-        }
-      }
+    window.onload = function() {
+      loadData();
     };
   </script>
 </body>
