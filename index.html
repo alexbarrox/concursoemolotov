@@ -1,1098 +1,615 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Concurso e Molotov | O Portal de TI no Setor Público</title>
-  
-  <!-- SEO & Social Meta Tags -->
-  <meta name="description" content="Acompanhe editais abertos, previsões, cargos de TI, remunerações e cronogramas de concursos públicos de Tecnologia da Informação.">
-  <meta name="theme-color" content="#030712">
-
-  <!-- Tailwind CSS CDN -->
+  <title>Concurso e Molotov | O Radar de Editais de TI</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
-            brand: {
+            molotov: {
+              cyan: '#06b6d4',
+              emerald: '#10b981',
               dark: '#030712',
-              card: '#0b1324',
-              surface: '#111c35',
-              border: '#1e293b',
-              accent: '#06b6d4',
-              emerald: '#10b981'
+              card: '#0b1329',
+              border: '#1e293b'
             }
           }
         }
       }
     }
   </script>
-
   <style>
-    /* Custom refined scrollbars */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #030712;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #1e293b;
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #334155;
-    }
-    /* Subtle pulse glow */
-    .glow-cyan {
-      box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.25);
-    }
+    body { background-color: #030712; color: #f8fafc; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #0b1329; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
   </style>
 </head>
-<body class="bg-brand-dark text-slate-100 min-h-screen flex flex-col font-sans selection:bg-cyan-500 selection:text-slate-950">
+<body class="min-h-screen flex flex-col font-sans selection:bg-cyan-500 selection:text-slate-950">
 
-  <!-- TOP STATUS BANNER -->
-  <aside aria-label="Avisos do portal" class="bg-gradient-to-r from-slate-950 via-brand-card to-slate-950 border-b border-slate-800 text-xs py-2 px-4 sm:px-8">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-2">
-        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse mr-1.5"></span> RADAR TI ATIVO
-        </span>
-        <span class="text-slate-400 text-[11px] sm:text-xs">
-          Monitoramento diário de editais de Tecnologia da Informação
-        </span>
-      </div>
-
-      <div class="flex items-center gap-4 text-[11px] text-slate-400">
-        <span class="hidden md:inline"><i class="fa-solid fa-code text-cyan-400 mr-1"></i> Carreira &bull; Dados &bull; Dev &bull; Infra &bull; Cyber</span>
-        <span id="dataStatusIndicator" class="inline-flex items-center gap-1.5 text-emerald-400 font-mono font-medium">
-          <i class="fa-solid fa-cloud-check text-xs"></i> Base Atualizada
-        </span>
-      </div>
-    </div>
-  </aside>
-
-  <!-- NAVBAR -->
-  <header class="bg-brand-card/90 border-b border-brand-border sticky top-0 z-40 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-      
-      <!-- Brand Logo -->
-      <div class="flex items-center gap-3.5">
-        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-emerald-500 flex items-center justify-center text-slate-950 text-xl font-black shadow-lg shadow-cyan-500/20 transform hover:scale-105 transition-transform cursor-pointer">
-          <i class="fa-solid fa-fire text-slate-950"></i>
+  <!-- Header Público -->
+  <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-400 flex items-center justify-center font-black text-slate-950 text-xl shadow-lg shadow-cyan-500/20">
+          M
         </div>
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-xl font-black tracking-tight text-white">Concurso e Molotov<span class="text-cyan-400">.pro</span></h1>
-          </div>
-          <p class="text-xs text-slate-400 font-medium">Oportunidades em Tecnologia da Informação</p>
+          <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
+            CONCURSO E MOLOTOV
+          </span>
+          <span class="block text-[11px] font-mono text-slate-400 uppercase tracking-widest">Radar de Oportunidades em TI</span>
         </div>
       </div>
 
-      <!-- Quick Metrics Header Pill -->
-      <div class="flex items-center gap-3">
-        <div class="hidden sm:flex bg-brand-surface/80 border border-brand-border px-3.5 py-2 rounded-xl items-center gap-3 text-xs">
-          <div class="text-right">
-            <span class="text-[10px] text-slate-400 uppercase font-bold block">Vagas Imediatas</span>
-            <span id="headerTotalVagas" class="text-cyan-400 font-mono font-bold text-sm">--</span>
-          </div>
-          <div class="w-px h-6 bg-slate-800"></div>
-          <div class="text-right">
-            <span class="text-[10px] text-slate-400 uppercase font-bold block">Média Inicial</span>
-            <span id="headerSalarioMedio" class="text-emerald-400 font-mono font-bold text-sm">--</span>
-          </div>
+      <!-- Métricas em tempo real -->
+      <div class="hidden sm:flex items-center gap-6 text-xs font-mono">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-slate-400">Total Monitorado:</span>
+          <span id="badgeTotal" class="text-emerald-400 font-bold">0</span>
         </div>
       </div>
-
     </div>
   </header>
 
-  <!-- MAIN CONTAINER -->
-  <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-
-    <!-- HERO & VIEW SWITCHER -->
-    <div class="bg-gradient-to-r from-brand-card via-brand-surface to-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
-      <div class="absolute -right-24 -top-24 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-      <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div class="max-w-2xl">
-          <div class="flex items-center gap-2 mb-2.5">
-            <span class="text-xs font-bold uppercase tracking-widest text-cyan-400 flex items-center gap-1.5">
-              <i class="fa-solid fa-terminal text-cyan-400"></i> Painel Oficial de Acompanhamento
-            </span>
-          </div>
-          <h2 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-white">
-            Carreiras Públicas de TI no Brasil
-          </h2>
-          <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">
-            Filtre editais em andamento, verifique salários iniciais reais, quantidade de vagas imediatas e datas limites de inscrição para focar nos concursos certos.
-          </p>
+  <!-- Conteúdo Principal -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Filtros e Controles -->
+    <section class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 mb-8 backdrop-blur shadow-xl">
+      <!-- Linha 1: Busca e Modos de Vista -->
+      <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-5 pb-5 border-b border-slate-800/60">
+        <div class="relative w-full md:w-96">
+          <svg class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" id="campoBusca" placeholder="Pesquisar órgão, cargo, banca ou local..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-11 pr-4 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors">
         </div>
 
-        <!-- View Controls Selector -->
-        <div class="inline-flex p-1.5 bg-brand-dark/90 rounded-2xl border border-brand-border shadow-inner self-start lg:self-auto shrink-0">
-          <button id="btn-view-cards" onclick="switchView('cards')" class="layout-toggle-btn active flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-cyan-500 text-slate-950 shadow-md">
-            <i class="fa-solid fa-grip"></i>
-            <span>Cards</span>
+        <!-- Seletor de Visualização -->
+        <div class="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 w-full md:w-auto justify-center">
+          <button id="btnModoCards" class="px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all bg-cyan-500 text-slate-950 shadow">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+            Cartões
           </button>
-          <button id="btn-view-table" onclick="switchView('table')" class="layout-toggle-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-slate-200">
-            <i class="fa-solid fa-table-list"></i>
-            <span>Tabela Analítica</span>
+          <button id="btnModoTabela" class="px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-slate-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            Tabela
           </button>
-          <button id="btn-view-timeline" onclick="switchView('timeline')" class="layout-toggle-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-slate-200">
-            <i class="fa-solid fa-timeline"></i>
-            <span>Cronograma</span>
+          <button id="btnModoTimeline" class="px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-slate-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Linha do Tempo
           </button>
         </div>
       </div>
-    </div>
 
-    <!-- ADVANCED FILTER DASHBOARD -->
-    <section aria-label="Filtros e Busca" class="bg-brand-card border border-brand-border rounded-2xl p-5 shadow-lg space-y-4">
-      
-      <!-- Top Row: Quick Text Search -->
-      <div class="relative w-full">
-        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
-        <input type="text" id="searchInput" oninput="applyFilters()" 
-          placeholder="Busca livre por Concurso, Cargo (ex: Dados, Software, Infra, Segurança), Banca ou Local..." 
-          class="w-full pl-11 pr-10 py-3 text-sm bg-brand-dark border border-brand-border rounded-xl text-slate-100 focus:outline-none focus:border-cyan-400 placeholder-slate-500 transition-colors">
-        <button id="clearSearchBtn" onclick="clearSearchText()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 w-6 h-6 rounded-full flex items-center justify-center">
-          <i class="fa-solid fa-xmark text-xs"></i>
-        </button>
+      <!-- Linha 2: Os 5 Filtros -->
+      <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
+        <!-- Filtro: Concurso / Órgão -->
+        <div>
+          <label class="block text-[11px] font-mono uppercase text-slate-400 mb-1">Órgão / Concurso</label>
+          <select id="filtroOrgao" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
+            <option value="">Todos os Órgãos</option>
+          </select>
+        </div>
+
+        <!-- Filtro: Cargo -->
+        <div>
+          <label class="block text-[11px] font-mono uppercase text-slate-400 mb-1">Cargo / Especialidade</label>
+          <select id="filtroCargo" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
+            <option value="">Todos os Cargos</option>
+          </select>
+        </div>
+
+        <!-- Filtro: Status -->
+        <div>
+          <label class="block text-[11px] font-mono uppercase text-slate-400 mb-1">Situação / Status</label>
+          <select id="filtroStatus" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
+            <option value="">Todos os Status</option>
+          </select>
+        </div>
+
+        <!-- Filtro: Banca -->
+        <div>
+          <label class="block text-[11px] font-mono uppercase text-slate-400 mb-1">Banca Examinadora</label>
+          <select id="filtroBanca" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
+            <option value="">Todas as Bancas</option>
+          </select>
+        </div>
+
+        <!-- Filtro: Salário -->
+        <div>
+          <label class="block text-[11px] font-mono uppercase text-slate-400 mb-1">Remuneração Mínima</label>
+          <select id="filtroSalario" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
+            <option value="0">Qualquer Valor</option>
+            <option value="5000">> R$ 5.000</option>
+            <option value="8000">> R$ 8.000</option>
+            <option value="12000">> R$ 12.000</option>
+            <option value="15000">> R$ 15.000</option>
+            <option value="20000">> R$ 20.000</option>
+          </select>
+        </div>
       </div>
 
-      <!-- Bottom Row: The 5 Dedicated Filters -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
-        
-        <!-- Filter 1: Status -->
-        <div>
-          <label for="filterStatus" class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-            <i class="fa-solid fa-flag text-cyan-400 mr-1"></i> Status
-          </label>
-          <select id="filterStatus" onchange="applyFilters()" 
-            class="w-full px-3 py-2.5 text-xs font-medium border border-brand-border rounded-xl bg-brand-dark text-slate-200 focus:outline-none focus:border-cyan-400">
-            <option value="ALL">Status: Todos</option>
-            <option value="Inscrições Abertas">Inscrições Abertas</option>
-            <option value="Edital Publicado">Edital Publicado</option>
-            <option value="Banca Definida">Banca Definida</option>
-            <option value="Previsto">Previsto</option>
-            <option value="Encerrado">Encerrado</option>
-          </select>
-        </div>
-
-        <!-- Filter 2: Banca Organizadora -->
-        <div>
-          <label for="filterBanca" class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-            <i class="fa-solid fa-building-columns text-cyan-400 mr-1"></i> Banca
-          </label>
-          <select id="filterBanca" onchange="applyFilters()" 
-            class="w-full px-3 py-2.5 text-xs font-medium border border-brand-border rounded-xl bg-brand-dark text-slate-200 focus:outline-none focus:border-cyan-400">
-            <option value="ALL">Banca: Todas</option>
-          </select>
-        </div>
-
-        <!-- Filter 3: Concurso / Órgão -->
-        <div>
-          <label for="filterConcurso" class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-            <i class="fa-solid fa-landmark text-cyan-400 mr-1"></i> Concurso (Órgão)
-          </label>
-          <select id="filterConcurso" onchange="applyFilters()" 
-            class="w-full px-3 py-2.5 text-xs font-medium border border-brand-border rounded-xl bg-brand-dark text-slate-200 focus:outline-none focus:border-cyan-400">
-            <option value="ALL">Órgão: Todos</option>
-          </select>
-        </div>
-
-        <!-- Filter 4: Cargo / Especialidade -->
-        <div>
-          <label for="filterCargo" class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-            <i class="fa-solid fa-id-badge text-cyan-400 mr-1"></i> Cargo de TI
-          </label>
-          <select id="filterCargo" onchange="applyFilters()" 
-            class="w-full px-3 py-2.5 text-xs font-medium border border-brand-border rounded-xl bg-brand-dark text-slate-200 focus:outline-none focus:border-cyan-400">
-            <option value="ALL">Cargo: Todos</option>
-          </select>
-        </div>
-
-        <!-- Filter 5: Remuneração Mínima -->
-        <div>
-          <label for="filterRemuneracao" class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-            <i class="fa-solid fa-money-bill-wave text-emerald-400 mr-1"></i> Remuneração
-          </label>
-          <select id="filterRemuneracao" onchange="applyFilters()" 
-            class="w-full px-3 py-2.5 text-xs font-medium border border-brand-border rounded-xl bg-brand-dark text-slate-200 focus:outline-none focus:border-cyan-400">
-            <option value="0">Salário: Qualquer</option>
-            <option value="5000">&ge; R$ 5.000</option>
-            <option value="8000">&ge; R$ 8.000</option>
-            <option value="12000">&ge; R$ 12.000</option>
-            <option value="15000">&ge; R$ 15.000</option>
-            <option value="20000">&ge; R$ 20.000</option>
-          </select>
-        </div>
-
-      </div>
-
-      <!-- Filter Metrics & Reset -->
-      <div class="flex flex-wrap items-center justify-between text-xs text-slate-400 pt-3 border-t border-slate-800 gap-3">
-        <div class="flex items-center gap-3">
-          <span class="inline-flex items-center gap-1.5">
-            Exibindo <strong id="count-visible" class="text-white font-mono font-bold text-sm">0</strong> editais filtrados
-          </span>
-          <span class="text-slate-600">&bull;</span>
-          <span class="inline-flex items-center gap-1.5">
-            Total Vagas Imediatas: <strong id="totalVagasSum" class="text-cyan-400 font-mono font-bold">0</strong>
-          </span>
-        </div>
-
-        <button onclick="resetFilters()" class="text-xs text-slate-300 hover:text-white px-3 py-1.5 rounded-lg bg-brand-surface hover:bg-slate-800 border border-brand-border transition-colors flex items-center gap-1.5 font-semibold">
-          <i class="fa-solid fa-arrow-rotate-left text-cyan-400"></i>
-          <span>Limpar Filtros</span>
-        </button>
-      </div>
-
-    </section>
-
-    <!-- VIEW 1: MODERN CARDS GRID -->
-    <section id="view-cards" class="transition-opacity duration-300">
-      <div id="cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Rendered by JS -->
+      <!-- Barra de Estado do Filtro -->
+      <div class="mt-4 flex justify-between items-center text-xs text-slate-400 pt-3 border-t border-slate-800/40">
+        <div>Mostrando <span id="qtdExibida" class="text-cyan-400 font-bold">0</span> oportunidades encontradas</div>
+        <button id="btnLimparFiltros" class="text-cyan-400 hover:text-cyan-300 font-medium">Limpar Filtros</button>
       </div>
     </section>
 
-    <!-- VIEW 2: ANALYTICAL TABLE -->
-    <section id="view-table" class="hidden transition-opacity duration-300">
-      <div class="bg-brand-card border border-brand-border rounded-2xl shadow-2xl overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-brand-dark/90 border-b border-brand-border text-slate-400 font-bold uppercase text-[10px] tracking-wider whitespace-nowrap">
+    <!-- Área de Exibição das Visualizações -->
+    <section>
+      <!-- Modo 1: Cards Grid -->
+      <div id="containerCards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+      <!-- Modo 2: Tabela Corporativa -->
+      <div id="containerTabela" class="hidden bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-slate-950/90 text-slate-400 uppercase font-mono border-b border-slate-800">
               <tr>
-                <th class="py-3.5 px-4">Status</th>
-                <th class="py-3.5 px-4 font-mono">Ano</th>
-                <th class="py-3.5 px-4">Concurso (Órgão)</th>
-                <th class="py-3.5 px-4">Cargos de TI</th>
-                <th class="py-3.5 px-4">Banca</th>
-                <th class="py-3.5 px-4">Vagas Imediatas</th>
-                <th class="py-3.5 px-4">CR</th>
-                <th class="py-3.5 px-4 text-right">Remuneração Inicial</th>
-                <th class="py-3.5 px-4">Inscrições</th>
-                <th class="py-3.5 px-4">Data Prova</th>
-                <th class="py-3.5 px-4">Local</th>
-                <th class="py-3.5 px-4 text-center">Ações</th>
+                <th class="p-3.5">Ano</th>
+                <th class="p-3.5">Status</th>
+                <th class="p-3.5">Concurso</th>
+                <th class="p-3.5">Cargo</th>
+                <th class="p-3.5">Banca</th>
+                <th class="p-3.5">Vagas</th>
+                <th class="p-3.5">CR</th>
+                <th class="p-3.5">Remuneração</th>
+                <th class="p-3.5">Inscrições</th>
+                <th class="p-3.5">Data Prova</th>
+                <th class="p-3.5">Local</th>
+                <th class="p-3.5 text-center">Edital</th>
               </tr>
             </thead>
-            <tbody id="table-container" class="divide-y divide-brand-border/60 text-slate-300">
-              <!-- Rendered by JS -->
-            </tbody>
+            <tbody id="corpoTabela" class="divide-y divide-slate-800/60 font-mono"></tbody>
           </table>
         </div>
       </div>
-    </section>
 
-    <!-- VIEW 3: TIMELINE / DEADLINE RADAR -->
-    <section id="view-timeline" class="hidden transition-opacity duration-300">
-      <div class="space-y-6" id="timeline-container">
-        <!-- Rendered by JS -->
-      </div>
+      <!-- Modo 3: Linha do Tempo -->
+      <div id="containerTimeline" class="hidden space-y-8"></div>
     </section>
-
   </main>
 
-  <!-- MODAL DE DETALHES COMPLETOS -->
-  <div id="detailsModal" class="fixed inset-0 z-50 bg-brand-dark/80 backdrop-blur-md hidden flex items-center justify-center p-4">
-    <div class="bg-brand-card rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-brand-border relative max-h-[90vh] overflow-y-auto">
-      <button onclick="closeDetailsModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white w-9 h-9 rounded-full flex items-center justify-center bg-brand-surface hover:bg-slate-800 transition-colors">
-        <i class="fa-solid fa-xmark text-lg"></i>
+  <!-- Modal de Detalhes -->
+  <div id="modalDetalhes" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-xl w-full p-6 relative shadow-2xl">
+      <button onclick="fecharModalDetalhes()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-100 p-1.5 rounded-lg bg-slate-800/50">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
-      <div id="modalContent"></div>
+
+      <div class="flex items-center gap-2 mb-3">
+        <span id="modalStatus" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"></span>
+        <span id="modalAno" class="text-xs font-mono text-slate-400"></span>
+      </div>
+
+      <h3 id="modalOrgao" class="text-2xl font-black text-slate-100 mb-4"></h3>
+
+      <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 mb-4">
+        <p class="text-[11px] font-mono uppercase text-cyan-400 mb-1">Cargos & Especialidades de TI</p>
+        <p id="modalCargo" class="text-sm font-semibold text-slate-200 leading-relaxed"></p>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3 mb-5">
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <span class="block text-[10px] font-mono text-slate-400 uppercase">Remuneração Inicial</span>
+          <span id="modalSalario" class="text-base font-bold text-emerald-400"></span>
+        </div>
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <span class="block text-[10px] font-mono text-slate-400 uppercase">Vagas Imediatas</span>
+          <span id="modalVagas" class="text-base font-bold text-slate-100"></span>
+        </div>
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <span class="block text-[10px] font-mono text-slate-400 uppercase">Cadastro Reserva</span>
+          <span id="modalCR" class="text-base font-bold text-slate-300"></span>
+        </div>
+      </div>
+
+      <div class="space-y-2.5 text-xs border-t border-slate-800/60 pt-4 mb-6">
+        <div class="flex justify-between">
+          <span class="text-slate-400">Banca Organizadora:</span>
+          <span id="modalBanca" class="font-semibold text-slate-200"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">Período de Inscrição:</span>
+          <span id="modalPeriodo" class="font-mono text-cyan-300 font-semibold"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">Data Prevista da Prova:</span>
+          <span id="modalDataProva" class="font-mono text-cyan-400 font-semibold"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">Local de Prova:</span>
+          <span id="modalLocal" class="font-semibold text-slate-200"></span>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <button onclick="fecharModalDetalhes()" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-xl text-xs transition-colors">Fechar</button>
+        <a id="modalLinkEdital" href="#" target="_blank" class="flex-1 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          Aceder ao Edital Oficial
+        </a>
+      </div>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="bg-brand-card border-t border-brand-border py-8 mt-16 text-slate-500 text-xs">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-      <div>
-        <div class="font-extrabold text-slate-300 text-sm flex items-center justify-center sm:justify-start gap-2">
-          <span>Concurso e Molotov</span>
-          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
-          <span class="text-cyan-400">TI Público</span>
-        </div>
-        <p class="text-slate-500 mt-1">Transformando o serviço público através da qualificação técnica de alto nível.</p>
-      </div>
-      <div class="text-slate-400 font-mono text-[11px]">
-        concursoemolotov.pro.br
-      </div>
+  <footer class="border-t border-slate-800/60 py-6 mt-12 bg-slate-950">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
+      <p class="font-semibold text-slate-300">Concurso e Molotov &copy; 2026</p>
+      <p class="mt-1">Portal independente de monitorização e partilha de editais para a carreira pública de TI.</p>
     </div>
   </footer>
 
-  <!-- CORE LOGIC SCRIPT -->
   <script>
-    const DATA_ENDPOINT = "dados.json";
+    let baseConcursos = [];
+    let concursosFiltrados = [];
+    let modoAtual = 'cards';
 
-    // Dataset rico e realista caso o dados.json ainda não esteja presente
-    const FALLBACK_DATASET = [
-      {
-        "id": 1,
-        "ano": 2026,
-        "status": "Inscrições Abertas",
-        "concurso": "CGU",
-        "banca": "Cebraspe",
-        "inscricaoDe": "2026-10-10",
-        "inscricoesAte": "2026-11-04",
-        "cargo": "Tecnologia da Informação - Ciência de Dados\nTecnologia da Informação - Infraestrutura de TI\nTecnologia da Informação - Desenvolvimento de Sistemas",
-        "vagasImediatas": 30,
-        "cr": "Sim (CR)",
-        "localProva": "Distrito Federal/DF e Capitais",
-        "dataProva": "2026-12-13",
-        "remuneracaoInicial": 20000.00,
-        "edital": "https://www.cebraspe.org.br"
-      },
-      {
-        "id": 2,
-        "ano": 2026,
-        "status": "Inscrições Abertas",
-        "concurso": "TCE GO",
-        "banca": "FCC",
-        "inscricaoDe": "2026-10-05",
-        "inscricoesAte": "2026-11-06",
-        "cargo": "Técnico de Controle Externo - TI",
-        "vagasImediatas": 10,
-        "cr": "CR",
-        "localProva": "Goiás/GO",
-        "dataProva": "2027-01-17",
-        "remuneracaoInicial": 11862.19,
-        "edital": "https://www.concursosfcc.com.br"
-      },
-      {
-        "id": 3,
-        "ano": 2026,
-        "status": "Inscrições Abertas",
-        "concurso": "TRT 8",
-        "banca": "FCC",
-        "inscricaoDe": "2026-10-05",
-        "inscricoesAte": "2026-11-05",
-        "cargo": "Analista Judiciário - TI\nTécnico Judiciário - TI",
-        "vagasImediatas": 0,
-        "cr": "CR Total",
-        "localProva": "Pará/PA e Amapá/AP",
-        "dataProva": "2027-01-17",
-        "remuneracaoInicial": 16040.88,
-        "edital": "https://www.concursosfcc.com.br"
-      },
-      {
-        "id": 4,
-        "ano": 2026,
-        "status": "Inscrições Abertas",
-        "concurso": "IFSP",
-        "banca": "Comissão própria",
-        "inscricaoDe": "2026-10-06",
-        "inscricoesAte": "2026-11-17",
-        "cargo": "Professor de Magistério - Informática",
-        "vagasImediatas": 18,
-        "cr": "0",
-        "localProva": "São Paulo/SP",
-        "dataProva": "2026-12-13",
-        "remuneracaoInicial": 6397.19,
-        "edital": "https://ifsp.edu.br"
-      },
-      {
-        "id": 5,
-        "ano": 2026,
-        "status": "Inscrições Abertas",
-        "concurso": "Câmara Mossoró RN",
-        "banca": "COMPERVE",
-        "inscricaoDe": "2026-10-13",
-        "inscricoesAte": "2026-11-12",
-        "cargo": "Técnico em Informática",
-        "vagasImediatas": 2,
-        "cr": "4",
-        "localProva": "Mossoró/RN",
-        "dataProva": "2026-10-06",
-        "remuneracaoInicial": 4921.08,
-        "edital": "https://comperve.ufrn.br"
-      },
-      {
-        "id": 6,
-        "ano": 2026,
-        "status": "Inscrições Abertas",
-        "concurso": "SETEC Campinas",
-        "banca": "INDEPAC",
-        "inscricaoDe": "2026-09-08",
-        "inscricoesAte": "2026-12-04",
-        "cargo": "Analista Técnico (Informática)",
-        "vagasImediatas": 1,
-        "cr": "0",
-        "localProva": "Campinas/SP",
-        "dataProva": "2027-01-17",
-        "remuneracaoInicial": 8285.32,
-        "edital": "https://indepac.org.br"
-      },
-      {
-        "id": 7,
-        "ano": 2026,
-        "status": "Inscrições Abertas",
-        "concurso": "DPE PB",
-        "banca": "FCC",
-        "inscricaoDe": "2026-09-28",
-        "inscricoesAte": "2026-11-13",
-        "cargo": "Analista da Defensoria - Desenvolvimento de Sistemas\nAnalista da Defensoria - Suporte e Infraestrutura\nAnalista da Defensoria - Segurança da Informação",
-        "vagasImediatas": 3,
-        "cr": "CR",
-        "localProva": "Paraíba/PB",
-        "dataProva": "2027-01-28",
-        "remuneracaoInicial": 5197.50,
-        "edital": "https://www.concursosfcc.com.br"
-      },
-      {
-        "id": 8,
-        "ano": 2026,
-        "status": "Inscrições Abertas",
-        "concurso": "CREMERJ",
-        "banca": "Instituto Consulplan",
-        "inscricaoDe": "2026-09-23",
-        "inscricoesAte": "2026-10-22",
-        "cargo": "Analista de Ciência e Análise de Dados\nAnalista de Banco de Dados (DBA)\nAnalista de Desenvolvimento de Sistemas\nWeb Designer",
-        "vagasImediatas": 2,
-        "cr": "CR",
-        "localProva": "Rio de Janeiro/RJ",
-        "dataProva": "2026-12-13",
-        "remuneracaoInicial": 7765.48,
-        "edital": "https://institutoconsulplan.org.br"
-      },
-      {
-        "id": 9,
-        "ano": 2026,
-        "status": "Edital Publicado",
-        "concurso": "Santa Luzia MG",
-        "banca": "COTEC Fadenor",
-        "inscricaoDe": "2026-12-17",
-        "inscricoesAte": "2027-01-15",
-        "cargo": "Técnico em Informática\nAnalista de Sistemas",
-        "vagasImediatas": 21,
-        "cr": "0",
-        "localProva": "Santa Luzia/MG",
-        "dataProva": "2027-03-14",
-        "remuneracaoInicial": 4584.20,
-        "edital": "https://cotec.fadenor.com.br"
-      },
-      {
-        "id": 10,
-        "ano": 2026,
-        "status": "Banca Definida",
-        "concurso": "Petrobras",
-        "banca": "Cesgranrio",
-        "inscricaoDe": "A definir",
-        "inscricoesAte": "A definir",
-        "cargo": "Profissional de TI - Ciência de Dados\nProfissional de TI - Engenharia de Software",
-        "vagasImediatas": 120,
-        "cr": "360",
-        "localProva": "Nacional",
-        "dataProva": "A definir",
-        "remuneracaoInicial": 13385.00,
-        "edital": "https://www.cesgranrio.org.br"
-      }
-    ];
-
-    let rawDataset = [];
-    let filteredList = [];
-    let currentView = 'cards';
-
-    async function loadData() {
-      const statusIndicator = document.getElementById('dataStatusIndicator');
+    // Carregamento dos Dados via dados.json
+    async function inicializarPortal() {
       try {
-        const response = await fetch(DATA_ENDPOINT + '?_t=' + Date.now());
-        if (!response.ok) throw new Error("HTTP " + response.status);
-        const data = await response.json();
-        rawDataset = Array.isArray(data) && data.length > 0 ? data : FALLBACK_DATASET;
-        statusIndicator.innerHTML = `<i class="fa-solid fa-cloud-check text-xs"></i> Base Atualizada (dados.json)`;
+        const res = await fetch('dados.json?_t=' + Date.now());
+        if (!res.ok) throw new Error('Ficheiro dados.json não encontrado');
+        baseConcursos = await res.json();
       } catch (err) {
-        console.info("Aviso: Carregando dataset mockado de contingência:", err.message);
-        rawDataset = FALLBACK_DATASET;
-        statusIndicator.innerHTML = `<i class="fa-solid fa-database text-xs text-amber-400"></i> Modo Demonstração`;
+        console.warn('A carregar dados locais de demonstração...');
+        baseConcursos = [
+          {
+            id: 1,
+            ano: 2026,
+            status: "Inscrições Abertas",
+            concurso: "CGU",
+            banca: "Cebraspe",
+            inscricoesDe: "10/10/2026",
+            inscricoesAte: "04/11/2026",
+            cargo: "Tecnologia da Informação - Ciência de Dados",
+            vagasImediatas: "10",
+            cadastroReserva: "Não informado",
+            localProva: "Distrito Federal/DF",
+            dataProva: "13/12/2026",
+            remuneracaoInicial: 20000.00,
+            editalUrl: "https://dhg1h5j42swfq.cloudfront.net/2026/10/09061405/diariooficial-5-155-170.pdf"
+          },
+          {
+            id: 2,
+            ano: 2026,
+            status: "Inscrições Abertas",
+            concurso: "TCE GO",
+            banca: "FCC",
+            inscricoesDe: "05/10/2026",
+            inscricoesAte: "06/11/2026",
+            cargo: "Técnico de Controle Externo - TI",
+            vagasImediatas: "10",
+            cadastroReserva: "Não informado",
+            localProva: "Goiás/GO",
+            dataProva: "17/01/2027",
+            remuneracaoInicial: 11862.19,
+            editalUrl: "#"
+          },
+          {
+            id: 3,
+            ano: 2026,
+            status: "Inscrições Abertas",
+            concurso: "TRT 8",
+            banca: "FCC",
+            inscricoesDe: "05/10/2026",
+            inscricoesAte: "05/11/2026",
+            cargo: "Analista Judiciário - TI",
+            vagasImediatas: "CR",
+            cadastroReserva: "Sim",
+            localProva: "Pará/PA Amapá/AP",
+            dataProva: "17/01/2027",
+            remuneracaoInicial: 16040.88,
+            editalUrl: "#"
+          }
+        ];
       }
 
-      populateDropdownFilters(rawDataset);
-      applyFilters();
-      updateHeaderSummaryMetrics(rawDataset);
+      document.getElementById('badgeTotal').textContent = baseConcursos.length;
+      popularFiltrosDinamicos();
+      aplicarFiltros();
     }
 
-    function formatCurrency(val) {
-      const num = typeof val === 'number' ? val : parseFloat(val);
-      if (isNaN(num) || num <= 0) return 'Consulte Edital';
-      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(num);
-    }
-
-    function formatDate(dateStr) {
-      if (!dateStr || dateStr.toLowerCase().includes('definir')) return 'A definir';
-      // If YYYY-MM-DD
-      const parts = String(dateStr).trim().split('-');
-      if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
-      // If MM/DD/YYYY from spreadsheet
-      const slashParts = String(dateStr).trim().split('/');
-      if (slashParts.length === 3 && slashParts[2].length === 4) {
-        // checks if month/day or day/month
-        if (parseInt(slashParts[0]) > 12) {
-          return `${slashParts[0]}/${slashParts[1]}/${slashParts[2]}`;
-        }
-        return `${slashParts[1].padStart(2, '0')}/${slashParts[0].padStart(2, '0')}/${slashParts[2]}`;
-      }
-      return dateStr;
-    }
-
-    function parseCargoList(cargoStr) {
-      if (!cargoStr) return ['Especialidade de TI'];
-      if (Array.isArray(cargoStr)) return cargoStr;
-      return String(cargoStr)
-        .split(/\r?\n/)
-        .map(c => c.trim())
-        .filter(c => c.length > 0);
-    }
-
-    function getStatusBadge(status) {
-      const s = String(status || '').trim().toLowerCase();
-      if (s.includes('aberta') || s.includes('inscrições')) {
-        return `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-700/80 shadow-sm">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Inscrições Abertas
-                </span>`;
-      }
-      if (s.includes('publicado')) {
-        return `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-700/80 shadow-sm">
-                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> Edital Publicado
-                </span>`;
-      }
-      if (s.includes('definida') || s.includes('previsto')) {
-        return `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-950 text-amber-300 border border-amber-700/80 shadow-sm">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> ${status}
-                </span>`;
-      }
-      if (s.includes('andamento')) {
-        return `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-950 text-blue-300 border border-blue-700/80 shadow-sm">
-                  <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> Em Andamento
-                </span>`;
-      }
-      return `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-900 text-slate-400 border border-slate-700">
-                ${status || 'Planejado'}
-              </span>`;
-    }
-
-    function updateHeaderSummaryMetrics(data) {
-      const totalVagas = data.reduce((acc, curr) => {
-        const v = parseInt(curr.vagasImediatas, 10);
-        return acc + (!isNaN(v) ? v : 0);
-      }, 0);
-
-      const validSalaries = data
-        .map(d => parseFloat(d.remuneracaoInicial))
-        .filter(s => !isNaN(s) && s > 0);
-
-      const mediaSalario = validSalaries.length > 0
-        ? validSalaries.reduce((a, b) => a + b, 0) / validSalaries.length
-        : 0;
-
-      document.getElementById('headerTotalVagas').innerText = totalVagas.toLocaleString('pt-BR');
-      document.getElementById('headerSalarioMedio').innerText = formatCurrency(mediaSalario);
-    }
-
-    function populateDropdownFilters(data) {
-      // 1. Bancas
-      const bancas = Array.from(new Set(data.map(d => String(d.banca || '').trim()).filter(Boolean))).sort();
-      const bancaSelect = document.getElementById('filterBanca');
-      bancaSelect.innerHTML = `<option value="ALL">Banca: Todas (${bancas.length})</option>` + 
-        bancas.map(b => `<option value="${b}">${b}</option>`).join('');
-
-      // 2. Concursos (Órgãos)
-      const concursos = Array.from(new Set(data.map(d => String(d.concurso || '').trim()).filter(Boolean))).sort();
-      const concursoSelect = document.getElementById('filterConcurso');
-      concursoSelect.innerHTML = `<option value="ALL">Órgão: Todos (${concursos.length})</option>` + 
-        concursos.map(c => `<option value="${c}">${c}</option>`).join('');
-
-      // 3. Cargos (separando quebras de linha)
-      const allCargos = [];
-      data.forEach(item => {
-        const parsed = parseCargoList(item.cargo);
-        parsed.forEach(c => allCargos.push(c));
-      });
-      const uniqueCargos = Array.from(new Set(allCargos)).sort();
-      const cargoSelect = document.getElementById('filterCargo');
-      cargoSelect.innerHTML = `<option value="ALL">Cargo: Todos (${uniqueCargos.length})</option>` + 
-        uniqueCargos.map(c => `<option value="${c}">${c}</option>`).join('');
-    }
-
-    function applyFilters() {
-      const search = document.getElementById('searchInput').value.toLowerCase().trim();
-      const status = document.getElementById('filterStatus').value;
-      const banca = document.getElementById('filterBanca').value;
-      const concurso = document.getElementById('filterConcurso').value;
-      const cargo = document.getElementById('filterCargo').value;
-      const rem = parseFloat(document.getElementById('filterRemuneracao').value) || 0;
-
-      // Toggle clear search button
-      const clearBtn = document.getElementById('clearSearchBtn');
-      if (search.length > 0) clearBtn.classList.remove('hidden');
-      else clearBtn.classList.add('hidden');
-
-      filteredList = rawDataset.filter(item => {
-        // Matches search query
-        const textToSearch = [
-          item.concurso,
-          item.cargo,
-          item.banca,
-          item.localProva
-        ].join(' ').toLowerCase();
-        const matchesSearch = !search || textToSearch.includes(search);
-
-        // Status match
-        const matchesStatus = (status === 'ALL') || 
-          String(item.status || '').toLowerCase().includes(status.toLowerCase());
-
-        // Banca match
-        const matchesBanca = (banca === 'ALL') || 
-          String(item.banca || '').toLowerCase() === banca.toLowerCase();
-
-        // Concurso match
-        const matchesConcurso = (concurso === 'ALL') || 
-          String(item.concurso || '').toLowerCase() === concurso.toLowerCase();
-
-        // Cargo match
-        const cargoList = parseCargoList(item.cargo);
-        const matchesCargo = (cargo === 'ALL') || 
-          cargoList.some(c => c.toLowerCase() === cargo.toLowerCase());
-
-        // Remuneração match
-        const salary = parseFloat(item.remuneracaoInicial) || 0;
-        const matchesRem = salary >= rem;
-
-        return matchesSearch && matchesStatus && matchesBanca && matchesConcurso && matchesCargo && matchesRem;
+    // Popular os 5 filtros
+    function popularFiltrosDinamicos() {
+      const orgaos = [...new Set(baseConcursos.map(c => c.concurso))].sort();
+      const selOrgao = document.getElementById('filtroOrgao');
+      selOrgao.innerHTML = '<option value="">Todos os Órgãos</option>';
+      orgaos.forEach(o => {
+        selOrgao.innerHTML += `<option value="${o}">${o}</option>`;
       });
 
-      // Update counters
-      document.getElementById('count-visible').innerText = filteredList.length;
-      const totalVagas = filteredList.reduce((acc, curr) => {
-        const v = parseInt(curr.vagasImediatas, 10);
-        return acc + (!isNaN(v) ? v : 0);
-      }, 0);
-      document.getElementById('totalVagasSum').innerText = totalVagas.toLocaleString('pt-BR');
-
-      renderCurrentView();
-    }
-
-    function clearSearchText() {
-      document.getElementById('searchInput').value = '';
-      applyFilters();
-    }
-
-    function resetFilters() {
-      document.getElementById('searchInput').value = '';
-      document.getElementById('filterStatus').value = 'ALL';
-      document.getElementById('filterBanca').value = 'ALL';
-      document.getElementById('filterConcurso').value = 'ALL';
-      document.getElementById('filterCargo').value = 'ALL';
-      document.getElementById('filterRemuneracao').value = '0';
-      applyFilters();
-    }
-
-    function switchView(viewName) {
-      currentView = viewName;
-      document.querySelectorAll('.layout-toggle-btn').forEach(btn => {
-        btn.classList.remove('bg-cyan-500', 'text-slate-950', 'shadow-md');
-        btn.classList.add('text-slate-400', 'hover:text-slate-200');
+      const cargos = [...new Set(baseConcursos.map(c => c.cargo).filter(Boolean))].sort();
+      const selCargo = document.getElementById('filtroCargo');
+      selCargo.innerHTML = '<option value="">Todos os Cargos</option>';
+      cargos.forEach(cg => {
+        selCargo.innerHTML += `<option value="${cg}">${cg}</option>`;
       });
 
-      const activeBtn = document.getElementById(`btn-view-${viewName}`);
-      activeBtn.classList.remove('text-slate-400', 'hover:text-slate-200');
-      activeBtn.classList.add('bg-cyan-500', 'text-slate-950', 'shadow-md');
+      const statuses = [...new Set(baseConcursos.map(c => c.status))].sort();
+      const selStatus = document.getElementById('filtroStatus');
+      selStatus.innerHTML = '<option value="">Todos os Status</option>';
+      statuses.forEach(s => {
+        selStatus.innerHTML += `<option value="${s}">${s}</option>`;
+      });
 
-      document.getElementById('view-cards').classList.add('hidden');
-      document.getElementById('view-table').classList.add('hidden');
-      document.getElementById('view-timeline').classList.add('hidden');
-
-      document.getElementById(`view-${viewName}`).classList.remove('hidden');
-      renderCurrentView();
+      const bancas = [...new Set(baseConcursos.map(c => c.banca))].sort();
+      const selBanca = document.getElementById('filtroBanca');
+      selBanca.innerHTML = '<option value="">Todas as Bancas</option>';
+      bancas.forEach(b => {
+        selBanca.innerHTML += `<option value="${b}">${b}</option>`;
+      });
     }
 
-    function renderCurrentView() {
-      if (currentView === 'cards') renderCards(filteredList);
-      if (currentView === 'table') renderTable(filteredList);
-      if (currentView === 'timeline') renderTimeline(filteredList);
+    // Lógica Central de Filtragem
+    function aplicarFiltros() {
+      const termo = document.getElementById('campoBusca').value.toLowerCase().trim();
+      const orgao = document.getElementById('filtroOrgao').value;
+      const cargo = document.getElementById('filtroCargo').value;
+      const status = document.getElementById('filtroStatus').value;
+      const banca = document.getElementById('filtroBanca').value;
+      const minSalario = parseFloat(document.getElementById('filtroSalario').value) || 0;
+
+      concursosFiltrados = baseConcursos.filter(c => {
+        const bateTexto = !termo || 
+          c.concurso.toLowerCase().includes(termo) ||
+          (c.cargo && c.cargo.toLowerCase().includes(termo)) ||
+          c.banca.toLowerCase().includes(termo) ||
+          c.localProva.toLowerCase().includes(termo);
+
+        const bateOrgao = !orgao || c.concurso === orgao;
+        const bateCargo = !cargo || c.cargo === cargo;
+        const bateStatus = !status || c.status === status;
+        const bateBanca = !banca || c.banca === banca;
+        const bateSalario = (c.remuneracaoInicial || 0) >= minSalario;
+
+        return bateTexto && bateOrgao && bateCargo && bateStatus && bateBanca && bateSalario;
+      });
+
+      document.getElementById('qtdExibida').textContent = concursosFiltrados.length;
+      renderizarVisualizacao();
     }
 
-    // ==========================================
-    // RENDER VIEW 1: CARDS
-    // ==========================================
-    function renderCards(list) {
-      const container = document.getElementById('cards-container');
-      if (list.length === 0) {
-        container.innerHTML = getEmptyState();
+    // Renderizador com base no modo selecionado
+    function renderizarVisualizacao() {
+      if (modoAtual === 'cards') renderizarCards();
+      else if (modoAtual === 'tabela') renderizarTabela();
+      else if (modoAtual === 'timeline') renderizarTimeline();
+    }
+
+    function renderizarCards() {
+      const container = document.getElementById('containerCards');
+      if (concursosFiltrados.length === 0) {
+        container.innerHTML = `<div class="col-span-full py-16 text-center text-slate-500 font-mono">Nenhum concurso encontrado para os filtros selecionados.</div>`;
         return;
       }
 
-      container.innerHTML = list.map(item => {
-        const cargos = parseCargoList(item.cargo);
-        const displayCargos = cargos.slice(0, 3);
-        const extraCargosCount = cargos.length - displayCargos.length;
-        const vagasImed = isNaN(parseInt(item.vagasImediatas)) ? item.vagasImediatas : `${item.vagasImediatas} vagas`;
-        const crInfo = item.cr && String(item.cr) !== '0' ? item.cr : 'Não informado';
+      container.innerHTML = concursosFiltrados.map(c => {
+        const remunTxt = c.remuneracaoInicial 
+          ? `R$ ${c.remuneracaoInicial.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
+          : 'Consulte Edital';
+
+        const statusCor = c.status === 'Inscrições Abertas' 
+          ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+          : (c.status === 'Edital Publicado' ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30' : 'bg-slate-800 text-slate-300 border-slate-700');
 
         return `
-          <div class="bg-brand-card rounded-2xl border border-brand-border hover:border-cyan-500/60 hover:shadow-2xl hover:shadow-cyan-950/40 transition-all duration-300 flex flex-col justify-between overflow-hidden group">
-            
-            <div class="p-5 pb-3">
-              <!-- Top Card Meta -->
-              <div class="flex items-start justify-between gap-2 mb-3">
-                ${getStatusBadge(item.status)}
-                <span class="text-xs font-mono font-bold text-slate-400 bg-brand-dark border border-brand-border px-2 py-0.5 rounded-lg">
-                  ${item.ano || 2026}
-                </span>
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition-all hover:-translate-y-1 shadow-lg group">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${statusCor}">${c.status}</span>
+                <span class="text-xs font-mono text-slate-500">${c.ano}</span>
+              </div>
+              
+              <h3 class="text-xl font-bold text-slate-100 group-hover:text-cyan-400 transition-colors mb-2">${c.concurso}</h3>
+
+              <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 mb-4">
+                <p class="text-xs font-semibold text-cyan-300 flex items-start gap-1.5 line-clamp-2">
+                  <span class="text-cyan-500">&lt;/&gt;</span> ${c.cargo}
+                </p>
               </div>
 
-              <!-- Concurso Title -->
-              <h3 class="text-xl font-black text-white group-hover:text-cyan-400 transition-colors mb-2.5 truncate" title="${item.concurso}">
-                ${item.concurso}
-              </h3>
-
-              <!-- Cargos List Pills -->
-              <div class="space-y-1.5 mb-4">
-                ${displayCargos.map(cargo => `
-                  <div class="text-xs font-medium text-cyan-200 bg-brand-surface/90 border border-cyan-800/40 rounded-lg px-2.5 py-1.5 flex items-center gap-2 truncate" title="${cargo}">
-                    <i class="fa-solid fa-code text-cyan-400 text-[10px] shrink-0"></i>
-                    <span class="truncate">${cargo}</span>
-                  </div>
-                `).join('')}
-                ${extraCargosCount > 0 ? `
-                  <div class="text-[11px] text-slate-400 pl-1 font-medium">
-                    + mais ${extraCargosCount} cargos de TI
-                  </div>
-                ` : ''}
+              <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/60 mb-4">
+                <span class="block text-[10px] font-mono text-slate-400 uppercase tracking-wider">Remuneração Inicial</span>
+                <span class="text-lg font-black font-mono ${c.remuneracaoInicial ? 'text-emerald-400' : 'text-slate-300'}">${remunTxt}</span>
               </div>
 
-              <!-- Remuneração Highlight -->
-              <div class="bg-gradient-to-r from-emerald-950/50 via-brand-dark/40 to-transparent border-l-4 border-emerald-500 p-3 rounded-r-xl mb-4">
-                <span class="text-[10px] uppercase font-bold text-emerald-400 tracking-wider block">Remuneração Inicial</span>
-                <div class="text-2xl font-black text-emerald-400 font-mono tracking-tight">
-                  ${formatCurrency(item.remuneracaoInicial)}
-                </div>
-              </div>
-
-              <!-- Vagas & CR Grid -->
-              <div class="grid grid-cols-2 gap-2 text-xs py-2.5 border-y border-brand-border/80 text-slate-300 mb-3 bg-brand-dark/30 rounded-lg px-2">
+              <div class="grid grid-cols-2 gap-2 text-xs mb-4 text-slate-400 font-mono">
                 <div>
-                  <span class="text-slate-500 block text-[10px] font-bold">VAGAS IMEDIATAS</span>
-                  <span class="font-bold text-white font-mono text-sm">${vagasImed}</span>
+                  <span class="block text-[10px] text-slate-400 uppercase">Vagas</span>
+                  <span class="font-bold text-slate-200">${c.vagasImediatas} vagas</span>
                 </div>
                 <div>
-                  <span class="text-slate-500 block text-[10px] font-bold">CADASTRO RESERVA</span>
-                  <span class="font-semibold text-slate-300 font-mono text-xs truncate block" title="${crInfo}">${crInfo}</span>
+                  <span class="block text-[10px] text-slate-400 uppercase">CR</span>
+                  <span class="font-bold text-slate-200">${c.cadastroReserva}</span>
                 </div>
               </div>
 
-              <!-- Concurso Key Specifics -->
-              <ul class="space-y-1.5 text-xs text-slate-300">
-                <li class="flex items-center justify-between">
-                  <span class="text-slate-500"><i class="fa-solid fa-building-columns w-4 text-cyan-400"></i> Banca:</span>
-                  <span class="font-semibold text-slate-200 truncate max-w-[180px]" title="${item.banca}">${item.banca}</span>
-                </li>
-                <li class="flex items-center justify-between">
-                  <span class="text-slate-500"><i class="fa-solid fa-location-dot w-4 text-cyan-400"></i> Local:</span>
-                  <span class="font-medium text-slate-300 text-right truncate max-w-[180px]" title="${item.localProva}">${item.localProva || 'Nacional'}</span>
-                </li>
-                <li class="flex items-center justify-between">
-                  <span class="text-slate-500"><i class="fa-solid fa-calendar-day w-4 text-cyan-400"></i> Prova:</span>
-                  <span class="font-bold text-slate-200 font-mono">${formatDate(item.dataProva)}</span>
-                </li>
-              </ul>
+              <div class="space-y-1 text-xs text-slate-400 border-t border-slate-800/60 pt-3 mb-4">
+                <div class="flex justify-between"><span>Banca:</span><span class="text-slate-200 font-medium">${c.banca}</span></div>
+                <div class="flex justify-between"><span>Local:</span><span class="text-slate-200 font-medium">${c.localProva}</span></div>
+                <div class="flex justify-between"><span>Prova:</span><span class="text-cyan-400 font-mono font-medium">${c.dataProva}</span></div>
+              </div>
             </div>
 
-            <!-- Bottom Actions -->
-            <div class="bg-brand-dark/80 px-5 py-3.5 border-t border-brand-border flex items-center gap-2 mt-2">
-              <button onclick="openDetailsModal(${item.id})" class="flex-1 text-center py-2 px-3 rounded-xl border border-brand-border bg-brand-surface hover:bg-slate-800 text-slate-200 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-circle-info text-cyan-400"></i> Detalhes
-              </button>
-              <a href="${item.edital || '#'}" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-md">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> Edital
-              </a>
+            <div class="flex gap-2 pt-2 border-t border-slate-800/40">
+              <button onclick="abrirModalDetalhes(${c.id})" class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs rounded-xl transition-colors">Detalhes</button>
+              ${c.editalUrl ? `<a href="${c.editalUrl}" target="_blank" class="flex-1 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs rounded-xl text-center transition-colors">Edital</a>` : ''}
             </div>
-
           </div>
         `;
       }).join('');
     }
 
-    // ==========================================
-    // RENDER VIEW 2: ANALYTICAL TABLE
-    // ==========================================
-    function renderTable(list) {
-      const container = document.getElementById('table-container');
-      if (list.length === 0) {
-        container.innerHTML = `<tr><td colspan="12" class="py-8 text-center text-slate-500 text-xs">${getEmptyState()}</td></tr>`;
-        return;
-      }
-
-      container.innerHTML = list.map(item => {
-        const cargos = parseCargoList(item.cargo);
-        const formattedCargos = cargos.length > 1
-          ? `${cargos[0]} <span class="text-cyan-400 font-mono text-[10px] font-bold">(+${cargos.length - 1})</span>`
-          : cargos[0];
-
-        return `
-          <tr class="hover:bg-brand-surface/60 transition-colors">
-            <td class="py-3 px-4 whitespace-nowrap">${getStatusBadge(item.status)}</td>
-            <td class="py-3 px-4 font-mono font-bold text-slate-400">${item.ano || 2026}</td>
-            <td class="py-3 px-4 font-black text-white whitespace-nowrap">${item.concurso}</td>
-            <td class="py-3 px-4 min-w-[200px] max-w-[280px]">
-              <div class="truncate text-slate-200 font-medium" title="${cargos.join(' | ')}">
-                ${formattedCargos}
-              </div>
-            </td>
-            <td class="py-3 px-4 font-semibold text-slate-300 whitespace-nowrap">${item.banca}</td>
-            <td class="py-3 px-4 font-mono font-bold text-white text-center whitespace-nowrap">${item.vagasImediatas}</td>
-            <td class="py-3 px-4 font-mono text-slate-400 text-center whitespace-nowrap">${item.cr || '-'}</td>
-            <td class="py-3 px-4 text-right font-mono font-bold text-emerald-400 whitespace-nowrap">
-              ${formatCurrency(item.remuneracaoInicial)}
-            </td>
-            <td class="py-3 px-4 whitespace-nowrap text-[11px]">
-              <span class="text-slate-400 font-mono">${formatDate(item.inscricaoDe)}</span> 
-              <span class="text-slate-600">&rarr;</span> 
-              <span class="font-bold text-slate-200 font-mono">${formatDate(item.inscricoesAte)}</span>
-            </td>
-            <td class="py-3 px-4 whitespace-nowrap font-semibold text-slate-200 font-mono">${formatDate(item.dataProva)}</td>
-            <td class="py-3 px-4 text-[11px] text-slate-300 truncate max-w-[130px]" title="${item.localProva}">${item.localProva}</td>
-            <td class="py-3 px-4 text-center whitespace-nowrap">
-              <div class="flex items-center justify-center gap-1.5">
-                <button onclick="openDetailsModal(${item.id})" title="Ver ficha completa" class="p-1.5 rounded-lg bg-brand-surface hover:bg-slate-800 text-slate-300 hover:text-cyan-400 border border-brand-border transition-colors">
-                  <i class="fa-solid fa-circle-info"></i>
-                </button>
-                <a href="${item.edital}" target="_blank" rel="noopener noreferrer" title="Acessar edital" class="p-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500 hover:text-slate-950 text-cyan-400 border border-cyan-500/30 transition-colors">
-                  <i class="fa-solid fa-file-lines"></i>
-                </a>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
+    function renderizarTabela() {
+      const corpo = document.getElementById('corpoTabela');
+      corpo.innerHTML = concursosFiltrados.map(c => `
+        <tr class="hover:bg-slate-800/40 transition-colors">
+          <td class="p-3.5 text-slate-400">${c.ano}</td>
+          <td class="p-3.5"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300 border border-slate-700">${c.status}</span></td>
+          <td class="p-3.5 font-bold text-slate-100">${c.concurso}</td>
+          <td class="p-3.5 text-cyan-300 max-w-xs truncate" title="${c.cargo}">${c.cargo}</td>
+          <td class="p-3.5 text-slate-300">${c.banca}</td>
+          <td class="p-3.5">${c.vagasImediatas}</td>
+          <td class="p-3.5 text-slate-400">${c.cadastroReserva}</td>
+          <td class="p-3.5 text-emerald-400 font-bold">${c.remuneracaoInicial ? 'R$ ' + c.remuneracaoInicial.toLocaleString('pt-BR', {minimumFractionDigits: 2}) : 'Consulte'}</td>
+          <td class="p-3.5 text-slate-300">${c.inscricoesAte !== 'A definir' ? c.inscricoesAte : '-'}</td>
+          <td class="p-3.5 text-cyan-400 font-bold">${c.dataProva}</td>
+          <td class="p-3.5 text-slate-400">${c.localProva}</td>
+          <td class="p-3.5 text-center">
+            ${c.editalUrl ? `<a href="${c.editalUrl}" target="_blank" class="text-cyan-400 hover:underline">Ver</a>` : '-'}
+          </td>
+        </tr>
+      `).join('');
     }
 
-    // ==========================================
-    // RENDER VIEW 3: TIMELINE
-    // ==========================================
-    function renderTimeline(list) {
-      const container = document.getElementById('timeline-container');
-      if (list.length === 0) {
-        container.innerHTML = getEmptyState();
-        return;
-      }
+    function renderizarTimeline() {
+      const container = document.getElementById('containerTimeline');
+      const grupos = {
+        'Inscrições Abertas': concursosFiltrados.filter(c => c.status === 'Inscrições Abertas'),
+        'Editais Publicados': concursosFiltrados.filter(c => c.status === 'Edital Publicado'),
+        'Previstos / Bancas Definidas': concursosFiltrados.filter(c => !['Inscrições Abertas', 'Edital Publicado'].includes(c.status))
+      };
 
-      const groups = [
-        {
-          id: 'abertas',
-          title: "Inscrições Abertas / Urgência Máxima",
-          desc: "Editais recebendo inscrições neste momento. Atenção aos prazos!",
-          icon: "fa-solid fa-fire text-amber-400",
-          items: list.filter(c => String(c.status).toLowerCase().includes('aberta') || String(c.status).toLowerCase().includes('inscrição'))
-        },
-        {
-          id: 'publicados',
-          title: "Editais Publicados (Inscrições em Breve)",
-          desc: "Regulamentos divulgados, cronograma oficial publicado.",
-          icon: "fa-solid fa-file-circle-check text-cyan-400",
-          items: list.filter(c => String(c.status).toLowerCase().includes('publicado'))
-        },
-        {
-          id: 'previstos',
-          title: "Radar de Editais Previstos & Banca Definida",
-          desc: "Concursos autorizados e com organizadoras já contratadas.",
-          icon: "fa-solid fa-radar text-emerald-400",
-          items: list.filter(c => String(c.status).toLowerCase().includes('previsto') || String(c.status).toLowerCase().includes('definida'))
-        }
-      ];
-
-      container.innerHTML = groups.map(group => {
-        if (group.items.length === 0) return '';
-        return `
-          <div class="bg-brand-card rounded-2xl border border-brand-border p-5 sm:p-6 shadow-sm">
-            
-            <div class="flex items-center gap-3 pb-4 mb-4 border-b border-brand-border">
-              <div class="w-10 h-10 rounded-xl bg-brand-surface flex items-center justify-center text-lg">
-                <i class="${group.icon}"></i>
-              </div>
-              <div>
-                <h4 class="text-sm sm:text-base font-extrabold text-white">${group.title} (${group.items.length})</h4>
-                <p class="text-xs text-slate-400">${group.desc}</p>
-              </div>
-            </div>
-
-            <div class="space-y-3.5">
-              ${group.items.map(item => {
-                const cargos = parseCargoList(item.cargo);
-                return `
-                  <div class="flex flex-col lg:flex-row lg:items-center justify-between p-4 rounded-xl border border-brand-border bg-brand-dark/70 hover:border-cyan-500/40 transition-all gap-4">
-                    
-                    <div class="space-y-1.5">
-                      <div class="flex items-center gap-2.5 flex-wrap">
-                        <span class="text-lg font-black text-white">${item.concurso}</span>
-                        ${getStatusBadge(item.status)}
-                        <span class="text-xs font-mono font-bold text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-md border border-emerald-800">
-                          ${formatCurrency(item.remuneracaoInicial)}
-                        </span>
-                      </div>
-
-                      <div class="text-xs font-semibold text-cyan-300">
-                        ${cargos.join(' &bull; ')}
-                      </div>
-
-                      <div class="flex items-center gap-4 text-xs text-slate-400 pt-1 flex-wrap">
-                        <span><i class="fa-solid fa-building-columns mr-1 text-cyan-400"></i> <strong>${item.banca}</strong></span>
-                        <span><i class="fa-solid fa-users mr-1 text-cyan-400"></i> ${item.vagasImediatas} vagas (+${item.cr || '0'} CR)</span>
-                        <span><i class="fa-solid fa-location-dot mr-1 text-cyan-400"></i> ${item.localProva}</span>
-                      </div>
-                    </div>
-
-                    <div class="flex lg:flex-col items-center lg:items-end justify-between border-t lg:border-t-0 pt-3 lg:pt-0 border-brand-border gap-2 shrink-0">
-                      <div class="text-left lg:text-right">
-                        <span class="text-[10px] text-slate-500 uppercase font-bold block">Inscrições Até</span>
-                        <span class="text-xs font-bold text-amber-300 font-mono">${formatDate(item.inscricoesAte)}</span>
-                      </div>
-                      <div class="flex items-center gap-2">
-                        <button onclick="openDetailsModal(${item.id})" class="text-xs px-3 py-1.5 rounded-lg bg-brand-surface hover:bg-slate-800 text-slate-300 font-semibold border border-brand-border transition-colors">
-                          Detalhes
-                        </button>
-                        <a href="${item.edital}" target="_blank" rel="noopener noreferrer" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition-colors flex items-center gap-1 shadow-sm">
-                          <i class="fa-solid fa-file-lines"></i> Edital
-                        </a>
-                      </div>
-                    </div>
-
-                  </div>
-                `;
-              }).join('')}
-            </div>
-
-          </div>
-        `;
-      }).join('');
-    }
-
-    function getEmptyState() {
-      return `
-        <div class="col-span-full py-16 text-center">
-          <div class="w-14 h-14 bg-brand-surface border border-brand-border rounded-2xl flex items-center justify-center mx-auto text-slate-500 mb-3 text-xl">
-            <i class="fa-solid fa-filter-circle-xmark text-cyan-400"></i>
-          </div>
-          <h4 class="text-base font-bold text-slate-200">Nenhum concurso localizado</h4>
-          <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">Tente ajustar ou limpar os filtros de busca para visualizar os editais disponíveis.</p>
-          <button onclick="resetFilters()" class="mt-4 px-4 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs font-bold transition-colors">
-            Restaurar Todos os Editais
-          </button>
-        </div>
-      `;
-    }
-
-    // ==========================================
-    // MODAL DE DETALHES
-    // ==========================================
-    function openDetailsModal(id) {
-      const item = rawDataset.find(c => c.id === id);
-      if (!item) return;
-
-      const cargos = parseCargoList(item.cargo);
-
-      document.getElementById('modalContent').innerHTML = `
-        <div class="flex items-start justify-between gap-3 mb-4">
-          <div>
-            <div class="flex items-center gap-2.5 mb-1.5">
-              ${getStatusBadge(item.status)}
-              <span class="text-xs font-mono font-bold text-slate-400 bg-brand-dark px-2 py-0.5 rounded border border-brand-border">Ano ${item.ano || 2026}</span>
-            </div>
-            <h3 class="text-2xl font-black text-white">${item.concurso}</h3>
-          </div>
-        </div>
-
-        <!-- Bloco de Cargos -->
-        <div class="bg-brand-surface/80 border border-cyan-800/40 rounded-2xl p-4 mb-4">
-          <span class="text-[10px] uppercase font-bold text-cyan-400 block tracking-wider mb-2">Cargos & Especialidades de TI</span>
-          <div class="space-y-1.5">
-            ${cargos.map(c => `
-              <div class="text-xs font-semibold text-slate-100 flex items-center gap-2">
-                <i class="fa-solid fa-check text-cyan-400 text-xs"></i>
-                <span>${c}</span>
+      container.innerHTML = Object.entries(grupos).map(([grupo, itens]) => `
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+          <h3 class="text-lg font-bold text-cyan-400 mb-4 flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span> ${grupo} (${itens.length})
+          </h3>
+          <div class="space-y-3">
+            ${itens.length === 0 ? '<p class="text-xs text-slate-500 font-mono">Nenhum concurso nesta categoria.</p>' : itens.map(c => `
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-950 p-3.5 rounded-xl border border-slate-800/80 gap-3">
+                <div>
+                  <span class="font-bold text-slate-100 text-sm">${c.concurso}</span>
+                  <span class="text-xs text-cyan-300 ml-2">&bull; ${c.cargo}</span>
+                  <div class="text-[11px] text-slate-400 font-mono mt-0.5">Banca: ${c.banca} | Prova: ${c.dataProva}</div>
+                </div>
+                <div class="flex items-center gap-4">
+                  <span class="text-sm font-mono font-bold text-emerald-400">${c.remuneracaoInicial ? 'R$ ' + c.remuneracaoInicial.toLocaleString('pt-BR', {minimumFractionDigits: 2}) : 'Consulte Edital'}</span>
+                  <button onclick="abrirModalDetalhes(${c.id})" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-lg transition-colors">Detalhes</button>
+                </div>
               </div>
             `).join('')}
           </div>
         </div>
-
-        <!-- Métricas Rápidas -->
-        <div class="grid grid-cols-3 gap-3 mb-5 text-xs">
-          <div class="p-3 bg-brand-dark rounded-xl border border-brand-border">
-            <span class="text-slate-500 block text-[10px] uppercase font-bold">Remuneração Inicial</span>
-            <span class="font-black text-emerald-400 font-mono text-base">${formatCurrency(item.remuneracaoInicial)}</span>
-          </div>
-          <div class="p-3 bg-brand-dark rounded-xl border border-brand-border">
-            <span class="text-slate-500 block text-[10px] uppercase font-bold">Vagas Imediatas</span>
-            <span class="font-bold text-white text-base font-mono">${item.vagasImediatas}</span>
-          </div>
-          <div class="p-3 bg-brand-dark rounded-xl border border-brand-border">
-            <span class="text-slate-500 block text-[10px] uppercase font-bold">Cadastro Reserva</span>
-            <span class="font-bold text-slate-300 text-base font-mono">${item.cr || 'Sim'}</span>
-          </div>
-        </div>
-
-        <!-- Cronograma & Local -->
-        <div class="space-y-2.5 text-xs border-t border-brand-border pt-4 mb-6">
-          <div class="flex justify-between py-1.5 border-b border-brand-border/40">
-            <span class="text-slate-400">Banca Organizadora:</span>
-            <span class="font-bold text-slate-200">${item.banca}</span>
-          </div>
-          <div class="flex justify-between py-1.5 border-b border-brand-border/40">
-            <span class="text-slate-400">Período de Inscrição:</span>
-            <span class="font-bold text-slate-200 font-mono">${formatDate(item.inscricaoDe)} até ${formatDate(item.inscricoesAte)}</span>
-          </div>
-          <div class="flex justify-between py-1.5 border-b border-brand-border/40">
-            <span class="text-slate-400">Data Prevista da Prova:</span>
-            <span class="font-bold text-cyan-300 font-mono">${formatDate(item.dataProva)}</span>
-          </div>
-          <div class="flex justify-between py-1.5">
-            <span class="text-slate-400">Local de Prova:</span>
-            <span class="font-bold text-slate-200 text-right">${item.localProva || 'A definir'}</span>
-          </div>
-        </div>
-
-        <!-- Botões de Ação -->
-        <div class="flex items-center gap-3">
-          <button onclick="closeDetailsModal()" class="flex-1 py-3 px-4 rounded-xl border border-brand-border text-slate-300 font-semibold text-xs hover:bg-slate-800 transition-colors">
-            Fechar
-          </button>
-          <a href="${item.edital}" target="_blank" rel="noopener noreferrer" class="flex-1 py-3 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs text-center shadow-lg transition-all flex items-center justify-center gap-2">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i> Acessar Edital Oficial
-          </a>
-        </div>
-      `;
-
-      document.getElementById('detailsModal').classList.remove('hidden');
+      `).join('');
     }
 
-    function closeDetailsModal() {
-      document.getElementById('detailsModal').classList.add('hidden');
+    // Modal de Detalhes
+    window.abrirModalDetalhes = function(id) {
+      const c = baseConcursos.find(item => item.id === id);
+      if (!c) return;
+
+      document.getElementById('modalOrgao').textContent = c.concurso;
+      document.getElementById('modalStatus').textContent = c.status;
+      document.getElementById('modalAno').textContent = `Ano ${c.ano}`;
+      document.getElementById('modalCargo').textContent = c.cargo;
+      document.getElementById('modalSalario').textContent = c.remuneracaoInicial 
+        ? `R$ ${c.remuneracaoInicial.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
+        : 'Consulte Edital';
+      document.getElementById('modalVagas').textContent = c.vagasImediatas;
+      document.getElementById('modalCR').textContent = c.cadastroReserva;
+      document.getElementById('modalBanca').textContent = c.banca;
+      document.getElementById('modalDataProva').textContent = c.dataProva;
+      document.getElementById('modalLocal').textContent = c.localProva;
+
+      // Montagem do Período de Inscrição Completo
+      let periodo = 'A definir';
+      const temInicio = c.inscricoesDe && c.inscricoesDe !== 'A definir' && c.inscricoesDe.trim() !== '';
+      const temFim = c.inscricoesAte && c.inscricoesAte !== 'A definir' && c.inscricoesAte.trim() !== '';
+
+      if (temInicio && temFim) {
+        periodo = `${c.inscricoesDe} até ${c.inscricoesAte}`;
+      } else if (temFim) {
+        periodo = `Até ${c.inscricoesAte}`;
+      } else if (temInicio) {
+        periodo = `A partir de ${c.inscricoesDe}`;
+      }
+      document.getElementById('modalPeriodo').textContent = periodo;
+
+      const linkEdital = document.getElementById('modalLinkEdital');
+      if (c.editalUrl) {
+        linkEdital.href = c.editalUrl;
+        linkEdital.classList.remove('hidden');
+      } else {
+        linkEdital.classList.add('hidden');
+      }
+
+      document.getElementById('modalDetalhes').classList.remove('hidden');
+    };
+
+    window.fecharModalDetalhes = function() {
+      document.getElementById('modalDetalhes').classList.add('hidden');
+    };
+
+    // Alternância de Visualizações
+    function alternarModo(novoModo) {
+      modoAtual = novoModo;
+      const bCards = document.getElementById('btnModoCards');
+      const bTabela = document.getElementById('btnModoTabela');
+      const bTime = document.getElementById('btnModoTimeline');
+      const cCards = document.getElementById('containerCards');
+      const cTabela = document.getElementById('containerTabela');
+      const cTime = document.getElementById('containerTimeline');
+
+      [bCards, bTabela, bTime].forEach(b => {
+        b.className = 'px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-slate-200';
+      });
+
+      cCards.classList.add('hidden');
+      cTabela.classList.add('hidden');
+      cTime.classList.add('hidden');
+
+      if (novoModo === 'cards') {
+        bCards.className = 'px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all bg-cyan-500 text-slate-950 shadow';
+        cCards.classList.remove('hidden');
+      } else if (novoModo === 'tabela') {
+        bTabela.className = 'px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all bg-cyan-500 text-slate-950 shadow';
+        cTabela.classList.remove('hidden');
+      } else if (novoModo === 'timeline') {
+        bTime.className = 'px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all bg-cyan-500 text-slate-950 shadow';
+        cTime.classList.remove('hidden');
+      }
+      renderizarVisualizacao();
     }
 
-    window.addEventListener('click', function(e) {
-      if (e.target === document.getElementById('detailsModal')) closeDetailsModal();
+    // Ouvintes de Eventos
+    document.getElementById('btnModoCards').addEventListener('click', () => alternarModo('cards'));
+    document.getElementById('btnModoTabela').addEventListener('click', () => alternarModo('tabela'));
+    document.getElementById('btnModoTimeline').addEventListener('click', () => alternarModo('timeline'));
+
+    document.getElementById('campoBusca').addEventListener('input', aplicarFiltros);
+    document.getElementById('filtroOrgao').addEventListener('change', aplicarFiltros);
+    document.getElementById('filtroCargo').addEventListener('change', aplicarFiltros);
+    document.getElementById('filtroStatus').addEventListener('change', aplicarFiltros);
+    document.getElementById('filtroBanca').addEventListener('change', aplicarFiltros);
+    document.getElementById('filtroSalario').addEventListener('change', aplicarFiltros);
+
+    document.getElementById('btnLimparFiltros').addEventListener('click', () => {
+      document.getElementById('campoBusca').value = '';
+      document.getElementById('filtroOrgao').value = '';
+      document.getElementById('filtroCargo').value = '';
+      document.getElementById('filtroStatus').value = '';
+      document.getElementById('filtroBanca').value = '';
+      document.getElementById('filtroSalario').value = '0';
+      aplicarFiltros();
     });
 
-    window.onload = function() {
-      loadData();
-    };
+    window.addEventListener('DOMContentLoaded', inicializarPortal);
   </script>
 </body>
 </html>
