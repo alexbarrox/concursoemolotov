@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Concurso e Molotov | O Radar de Editais de TI</title>
+  <title>Concurso e Molotov | A revolução por meio do estudo.</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,21 +32,22 @@
 
   <!-- Header -->
   <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-400 flex items-center justify-center font-black text-slate-950 text-xl shadow-lg shadow-cyan-500/20">
-          M
-        </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between">
+      
+      <!-- Logo Oficial Emblema Circular -->
+      <a href="/" class="flex items-center gap-3.5 group">
+        <img src="logo.png" alt="Concurso e Molotov" class="h-16 w-16 sm:h-20 sm:w-20 object-contain rounded-full shadow-lg shadow-cyan-950/40 transition-transform group-hover:scale-105">
         <div>
-          <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
+          <span class="text-xl sm:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
             CONCURSO E MOLOTOV
           </span>
-          <span class="block text-[11px] font-mono text-slate-400 uppercase tracking-widest">Radar de Oportunidades em TI</span>
+          <span class="block text-[11px] font-mono text-cyan-400 uppercase tracking-widest font-semibold">A revolução por meio do estudo.</span>
         </div>
-      </div>
+      </a>
 
+      <!-- Métricas / Monitorados -->
       <div class="hidden sm:flex items-center gap-6 text-xs font-mono">
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 bg-slate-900/80 border border-slate-800 px-4 py-2 rounded-xl shadow-inner">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
           <span class="text-slate-400">Total Monitorado:</span>
           <span id="badgeTotal" class="text-emerald-400 font-bold">0</span>
@@ -232,7 +233,7 @@
   <footer class="border-t border-slate-800/60 py-6 mt-12 bg-slate-950">
     <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
       <p class="font-semibold text-slate-300">Concurso e Molotov &copy; 2026</p>
-      <p class="mt-1">Radar independente de editais e oportunidades públicas de Tecnologia da Informação.</p>
+      <p class="mt-1 text-cyan-400 font-medium">A revolução por meio do estudo.</p>
     </div>
   </footer>
 
@@ -346,7 +347,7 @@
               
               <h3 class="text-xl font-bold text-slate-100 group-hover:text-cyan-400 transition-colors mb-2">${c.concurso}</h3>
 
-              <!-- Caixa do Cargo com SVG blindado sem quebra -->
+              <!-- Caixa do Cargo -->
               <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 mb-4 flex items-start gap-2.5">
                 <div class="mt-0.5 shrink-0 text-cyan-400">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
