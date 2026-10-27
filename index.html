@@ -30,7 +30,7 @@
 </head>
 <body class="min-h-screen flex flex-col font-sans selection:bg-cyan-500 selection:text-slate-950">
 
-  <!-- Header Público -->
+  <!-- Header -->
   <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -55,12 +55,11 @@
     </div>
   </header>
 
-  <!-- Conteúdo Principal -->
+  <!-- Principal -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
-    <!-- Filtros e Controles -->
+    <!-- Filtros -->
     <section class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 mb-8 backdrop-blur shadow-xl">
-      <!-- Linha 1: Busca e Modos de Vista -->
       <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-5 pb-5 border-b border-slate-800/60">
         <div class="relative w-full md:w-96">
           <svg class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -83,7 +82,7 @@
         </div>
       </div>
 
-      <!-- Linha 2: Os 5 Filtros -->
+      <!-- Seletores -->
       <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
         <div>
           <label class="block text-[11px] font-mono uppercase text-slate-400 mb-1">Órgão / Concurso</label>
@@ -127,17 +126,17 @@
       </div>
 
       <div class="mt-4 flex justify-between items-center text-xs text-slate-400 pt-3 border-t border-slate-800/40">
-        <div>Mostrando <span id="qtdExibida" class="text-cyan-400 font-bold">0</span> oportunidades encontradas</div>
+        <div>A apresentar <span id="qtdExibida" class="text-cyan-400 font-bold">0</span> concursos</div>
         <button id="btnLimparFiltros" class="text-cyan-400 hover:text-cyan-300 font-medium">Limpar Filtros</button>
       </div>
     </section>
 
     <!-- Visualizações -->
     <section>
-      <!-- Modo 1: Cards Grid -->
+      <!-- Cards -->
       <div id="containerCards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
-      <!-- Modo 2: Tabela Corporativa -->
+      <!-- Tabela -->
       <div id="containerTabela" class="hidden bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
         <div class="overflow-x-auto custom-scrollbar">
           <table class="w-full text-left text-xs text-slate-300">
@@ -162,12 +161,12 @@
         </div>
       </div>
 
-      <!-- Modo 3: Linha do Tempo -->
+      <!-- Linha do Tempo -->
       <div id="containerTimeline" class="hidden space-y-8"></div>
     </section>
   </main>
 
-  <!-- Modal de Detalhes -->
+  <!-- Modal Detalhes -->
   <div id="modalDetalhes" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-xl w-full p-6 relative shadow-2xl">
       <button onclick="fecharModalDetalhes()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-100 p-1.5 rounded-lg bg-slate-800/50">
@@ -242,31 +241,20 @@
     let concursosFiltrados = [];
     let modoAtual = 'cards';
 
+    function sanitizarCR(val) {
+      if (!val) return 'Não informado';
+      const s = String(val).trim();
+      if (/gmt|utc|horário|\d{2}:\d{2}:\d{2}/i.test(s)) return 'Não informado';
+      return s;
+    }
+
     async function inicializarPortal() {
       try {
         const res = await fetch('dados.json?_t=' + Date.now());
-        if (!res.ok) throw new Error('Ficheiro dados.json não encontrado');
+        if (!res.ok) throw new Error('dados.json não encontrado');
         baseConcursos = await res.json();
       } catch (err) {
-        console.warn('A carregar dados locais de demonstração...');
-        baseConcursos = [
-          {
-            id: 1,
-            ano: 2026,
-            status: "Inscrições Abertas",
-            concurso: "CGU",
-            banca: "Cebraspe",
-            inscricoesDe: "10/10/2026",
-            inscricoesAte: "04/11/2026",
-            cargo: "Tecnologia da Informação - Ciência de Dados",
-            vagasImediatas: "10",
-            cadastroReserva: "Não informado",
-            localProva: "Distrito Federal/DF",
-            dataProva: "13/12/2026",
-            remuneracaoInicial: 20000.00,
-            editalUrl: "https://dhg1h5j42swfq.cloudfront.net/2026/10/09061405/diariooficial-5-155-170.pdf"
-          }
-        ];
+        console.warn('Erro ao carregar dados.json:', err);
       }
 
       document.getElementById('badgeTotal').textContent = baseConcursos.length;
@@ -346,6 +334,8 @@
           ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
           : (c.status === 'Edital Publicado' ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30' : 'bg-slate-800 text-slate-300 border-slate-700');
 
+        const crExibido = sanitizarCR(c.cadastroReserva);
+
         return `
           <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition-all hover:-translate-y-1 shadow-lg group">
             <div>
@@ -356,7 +346,7 @@
               
               <h3 class="text-xl font-bold text-slate-100 group-hover:text-cyan-400 transition-colors mb-2">${c.concurso}</h3>
 
-              <!-- Caixa do Cargo com ícone SVG indivisível -->
+              <!-- Caixa do Cargo com SVG blindado sem quebra -->
               <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 mb-4 flex items-start gap-2.5">
                 <div class="mt-0.5 shrink-0 text-cyan-400">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
@@ -376,7 +366,7 @@
                 </div>
                 <div>
                   <span class="block text-[10px] text-slate-400 uppercase">CR</span>
-                  <span class="font-bold text-slate-200 truncate block" title="${c.cadastroReserva}">${c.cadastroReserva}</span>
+                  <span class="font-bold text-slate-200 truncate block" title="${crExibido}">${crExibido}</span>
                 </div>
               </div>
 
@@ -406,7 +396,7 @@
           <td class="p-3.5 text-cyan-300 max-w-xs truncate" title="${c.cargo}">${c.cargo}</td>
           <td class="p-3.5 text-slate-300">${c.banca}</td>
           <td class="p-3.5">${c.vagasImediatas}</td>
-          <td class="p-3.5 text-slate-400">${c.cadastroReserva}</td>
+          <td class="p-3.5 text-slate-400">${sanitizarCR(c.cadastroReserva)}</td>
           <td class="p-3.5 text-emerald-400 font-bold">${c.remuneracaoInicial ? 'R$ ' + c.remuneracaoInicial.toLocaleString('pt-BR', {minimumFractionDigits: 2}) : 'Consulte'}</td>
           <td class="p-3.5 text-slate-300">${c.inscricoesAte || '-'}</td>
           <td class="p-3.5 text-cyan-400 font-bold">${c.dataProva}</td>
@@ -462,7 +452,7 @@
         ? `R$ ${c.remuneracaoInicial.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
         : 'Consulte Edital';
       document.getElementById('modalVagas').textContent = c.vagasImediatas;
-      document.getElementById('modalCR').textContent = c.cadastroReserva;
+      document.getElementById('modalCR').textContent = sanitizarCR(c.cadastroReserva);
       document.getElementById('modalBanca').textContent = c.banca;
       document.getElementById('modalDataProva').textContent = c.dataProva;
       document.getElementById('modalLocal').textContent = c.localProva;
