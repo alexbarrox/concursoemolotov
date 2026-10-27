@@ -15,15 +15,6 @@
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
-          },
-          colors: {
-            molotov: {
-              cyan: '#06b6d4',
-              emerald: '#10b981',
-              dark: '#030712',
-              card: '#0b1329',
-              border: '#1e293b'
-            }
           }
         }
       }
@@ -54,7 +45,6 @@
         </div>
       </div>
 
-      <!-- Métricas em tempo real -->
       <div class="hidden sm:flex items-center gap-6 text-xs font-mono">
         <div class="flex items-center gap-2">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -77,7 +67,6 @@
           <input type="text" id="campoBusca" placeholder="Pesquisar órgão, cargo, banca ou local..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-11 pr-4 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors">
         </div>
 
-        <!-- Seletor de Visualização -->
         <div class="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 w-full md:w-auto justify-center">
           <button id="btnModoCards" class="px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all bg-cyan-500 text-slate-950 shadow">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
@@ -96,7 +85,6 @@
 
       <!-- Linha 2: Os 5 Filtros -->
       <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
-        <!-- Filtro: Concurso / Órgão -->
         <div>
           <label class="block text-[11px] font-mono uppercase text-slate-400 mb-1">Órgão / Concurso</label>
           <select id="filtroOrgao" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
@@ -104,7 +92,6 @@
           </select>
         </div>
 
-        <!-- Filtro: Cargo -->
         <div>
           <label class="block text-[11px] font-mono uppercase text-slate-400 mb-1">Cargo / Especialidade</label>
           <select id="filtroCargo" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
@@ -112,7 +99,6 @@
           </select>
         </div>
 
-        <!-- Filtro: Status -->
         <div>
           <label class="block text-[11px] font-mono uppercase text-slate-400 mb-1">Situação / Status</label>
           <select id="filtroStatus" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
@@ -120,7 +106,6 @@
           </select>
         </div>
 
-        <!-- Filtro: Banca -->
         <div>
           <label class="block text-[11px] font-mono uppercase text-slate-400 mb-1">Banca Examinadora</label>
           <select id="filtroBanca" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
@@ -128,7 +113,6 @@
           </select>
         </div>
 
-        <!-- Filtro: Salário -->
         <div>
           <label class="block text-[11px] font-mono uppercase text-slate-400 mb-1">Remuneração Mínima</label>
           <select id="filtroSalario" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
@@ -142,14 +126,13 @@
         </div>
       </div>
 
-      <!-- Barra de Estado do Filtro -->
       <div class="mt-4 flex justify-between items-center text-xs text-slate-400 pt-3 border-t border-slate-800/40">
         <div>Mostrando <span id="qtdExibida" class="text-cyan-400 font-bold">0</span> oportunidades encontradas</div>
         <button id="btnLimparFiltros" class="text-cyan-400 hover:text-cyan-300 font-medium">Limpar Filtros</button>
       </div>
     </section>
 
-    <!-- Área de Exibição das Visualizações -->
+    <!-- Visualizações -->
     <section>
       <!-- Modo 1: Cards Grid -->
       <div id="containerCards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -199,7 +182,7 @@
       <h3 id="modalOrgao" class="text-2xl font-black text-slate-100 mb-4"></h3>
 
       <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 mb-4">
-        <p class="text-[11px] font-mono uppercase text-cyan-400 mb-1">Cargos & Especialidades de TI</p>
+        <p class="text-[11px] font-mono uppercase text-cyan-400 mb-1">Cargo & Especialidade de TI</p>
         <p id="modalCargo" class="text-sm font-semibold text-slate-200 leading-relaxed"></p>
       </div>
 
@@ -250,7 +233,7 @@
   <footer class="border-t border-slate-800/60 py-6 mt-12 bg-slate-950">
     <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
       <p class="font-semibold text-slate-300">Concurso e Molotov &copy; 2026</p>
-      <p class="mt-1">Portal independente de monitorização e partilha de editais para a carreira pública de TI.</p>
+      <p class="mt-1">Radar independente de editais e oportunidades públicas de Tecnologia da Informação.</p>
     </div>
   </footer>
 
@@ -259,7 +242,6 @@
     let concursosFiltrados = [];
     let modoAtual = 'cards';
 
-    // Carregamento dos Dados via dados.json
     async function inicializarPortal() {
       try {
         const res = await fetch('dados.json?_t=' + Date.now());
@@ -283,38 +265,6 @@
             dataProva: "13/12/2026",
             remuneracaoInicial: 20000.00,
             editalUrl: "https://dhg1h5j42swfq.cloudfront.net/2026/10/09061405/diariooficial-5-155-170.pdf"
-          },
-          {
-            id: 2,
-            ano: 2026,
-            status: "Inscrições Abertas",
-            concurso: "TCE GO",
-            banca: "FCC",
-            inscricoesDe: "05/10/2026",
-            inscricoesAte: "06/11/2026",
-            cargo: "Técnico de Controle Externo - TI",
-            vagasImediatas: "10",
-            cadastroReserva: "Não informado",
-            localProva: "Goiás/GO",
-            dataProva: "17/01/2027",
-            remuneracaoInicial: 11862.19,
-            editalUrl: "#"
-          },
-          {
-            id: 3,
-            ano: 2026,
-            status: "Inscrições Abertas",
-            concurso: "TRT 8",
-            banca: "FCC",
-            inscricoesDe: "05/10/2026",
-            inscricoesAte: "05/11/2026",
-            cargo: "Analista Judiciário - TI",
-            vagasImediatas: "CR",
-            cadastroReserva: "Sim",
-            localProva: "Pará/PA Amapá/AP",
-            dataProva: "17/01/2027",
-            remuneracaoInicial: 16040.88,
-            editalUrl: "#"
           }
         ];
       }
@@ -324,38 +274,28 @@
       aplicarFiltros();
     }
 
-    // Popular os 5 filtros
     function popularFiltrosDinamicos() {
       const orgaos = [...new Set(baseConcursos.map(c => c.concurso))].sort();
       const selOrgao = document.getElementById('filtroOrgao');
       selOrgao.innerHTML = '<option value="">Todos os Órgãos</option>';
-      orgaos.forEach(o => {
-        selOrgao.innerHTML += `<option value="${o}">${o}</option>`;
-      });
+      orgaos.forEach(o => selOrgao.innerHTML += `<option value="${o}">${o}</option>`);
 
       const cargos = [...new Set(baseConcursos.map(c => c.cargo).filter(Boolean))].sort();
       const selCargo = document.getElementById('filtroCargo');
       selCargo.innerHTML = '<option value="">Todos os Cargos</option>';
-      cargos.forEach(cg => {
-        selCargo.innerHTML += `<option value="${cg}">${cg}</option>`;
-      });
+      cargos.forEach(cg => selCargo.innerHTML += `<option value="${cg}">${cg}</option>`);
 
       const statuses = [...new Set(baseConcursos.map(c => c.status))].sort();
       const selStatus = document.getElementById('filtroStatus');
       selStatus.innerHTML = '<option value="">Todos os Status</option>';
-      statuses.forEach(s => {
-        selStatus.innerHTML += `<option value="${s}">${s}</option>`;
-      });
+      statuses.forEach(s => selStatus.innerHTML += `<option value="${s}">${s}</option>`);
 
       const bancas = [...new Set(baseConcursos.map(c => c.banca))].sort();
       const selBanca = document.getElementById('filtroBanca');
       selBanca.innerHTML = '<option value="">Todas as Bancas</option>';
-      bancas.forEach(b => {
-        selBanca.innerHTML += `<option value="${b}">${b}</option>`;
-      });
+      bancas.forEach(b => selBanca.innerHTML += `<option value="${b}">${b}</option>`);
     }
 
-    // Lógica Central de Filtragem
     function aplicarFiltros() {
       const termo = document.getElementById('campoBusca').value.toLowerCase().trim();
       const orgao = document.getElementById('filtroOrgao').value;
@@ -384,7 +324,6 @@
       renderizarVisualizacao();
     }
 
-    // Renderizador com base no modo selecionado
     function renderizarVisualizacao() {
       if (modoAtual === 'cards') renderizarCards();
       else if (modoAtual === 'tabela') renderizarTabela();
@@ -394,7 +333,7 @@
     function renderizarCards() {
       const container = document.getElementById('containerCards');
       if (concursosFiltrados.length === 0) {
-        container.innerHTML = `<div class="col-span-full py-16 text-center text-slate-500 font-mono">Nenhum concurso encontrado para os filtros selecionados.</div>`;
+        container.innerHTML = `<div class="col-span-full py-16 text-center text-slate-500 font-mono">Nenhum concurso encontrado.</div>`;
         return;
       }
 
@@ -417,10 +356,12 @@
               
               <h3 class="text-xl font-bold text-slate-100 group-hover:text-cyan-400 transition-colors mb-2">${c.concurso}</h3>
 
-              <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 mb-4">
-                <p class="text-xs font-semibold text-cyan-300 flex items-start gap-1.5 line-clamp-2">
-                  <span class="text-cyan-500">&lt;/&gt;</span> ${c.cargo}
-                </p>
+              <!-- Caixa do Cargo com ícone SVG indivisível -->
+              <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 mb-4 flex items-start gap-2.5">
+                <div class="mt-0.5 shrink-0 text-cyan-400">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                </div>
+                <p class="text-xs font-semibold text-cyan-300 leading-snug line-clamp-2">${c.cargo}</p>
               </div>
 
               <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/60 mb-4">
@@ -435,7 +376,7 @@
                 </div>
                 <div>
                   <span class="block text-[10px] text-slate-400 uppercase">CR</span>
-                  <span class="font-bold text-slate-200">${c.cadastroReserva}</span>
+                  <span class="font-bold text-slate-200 truncate block" title="${c.cadastroReserva}">${c.cadastroReserva}</span>
                 </div>
               </div>
 
@@ -467,7 +408,7 @@
           <td class="p-3.5">${c.vagasImediatas}</td>
           <td class="p-3.5 text-slate-400">${c.cadastroReserva}</td>
           <td class="p-3.5 text-emerald-400 font-bold">${c.remuneracaoInicial ? 'R$ ' + c.remuneracaoInicial.toLocaleString('pt-BR', {minimumFractionDigits: 2}) : 'Consulte'}</td>
-          <td class="p-3.5 text-slate-300">${c.inscricoesAte !== 'A definir' ? c.inscricoesAte : '-'}</td>
+          <td class="p-3.5 text-slate-300">${c.inscricoesAte || '-'}</td>
           <td class="p-3.5 text-cyan-400 font-bold">${c.dataProva}</td>
           <td class="p-3.5 text-slate-400">${c.localProva}</td>
           <td class="p-3.5 text-center">
@@ -509,7 +450,6 @@
       `).join('');
     }
 
-    // Modal de Detalhes
     window.abrirModalDetalhes = function(id) {
       const c = baseConcursos.find(item => item.id === id);
       if (!c) return;
@@ -527,7 +467,6 @@
       document.getElementById('modalDataProva').textContent = c.dataProva;
       document.getElementById('modalLocal').textContent = c.localProva;
 
-      // Montagem do Período de Inscrição Completo
       let periodo = 'A definir';
       const temInicio = c.inscricoesDe && c.inscricoesDe !== 'A definir' && c.inscricoesDe.trim() !== '';
       const temFim = c.inscricoesAte && c.inscricoesAte !== 'A definir' && c.inscricoesAte.trim() !== '';
@@ -556,7 +495,6 @@
       document.getElementById('modalDetalhes').classList.add('hidden');
     };
 
-    // Alternância de Visualizações
     function alternarModo(novoModo) {
       modoAtual = novoModo;
       const bCards = document.getElementById('btnModoCards');
@@ -587,7 +525,6 @@
       renderizarVisualizacao();
     }
 
-    // Ouvintes de Eventos
     document.getElementById('btnModoCards').addEventListener('click', () => alternarModo('cards'));
     document.getElementById('btnModoTabela').addEventListener('click', () => alternarModo('tabela'));
     document.getElementById('btnModoTimeline').addEventListener('click', () => alternarModo('timeline'));

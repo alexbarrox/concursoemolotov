@@ -11,10 +11,10 @@
   <div class="max-w-6xl mx-auto">
     <header class="mb-8 border-b border-slate-800 pb-4 flex justify-between items-center">
       <div>
-        <h1 class="text-2xl font-bold text-cyan-400">Painel de Importação e Geração de Dados</h1>
-        <p class="text-sm text-slate-400">Carregue o ficheiro <code>Concurso e Molotov.xlsx</code> para gerar o <code>dados.json</code>.</p>
+        <h1 class="text-2xl font-bold text-cyan-400">Painel de Importação de Dados</h1>
+        <p class="text-sm text-slate-400">Gera o ficheiro <code class="text-emerald-400">dados.json</code> a partir de <code>Concurso e Molotov.xlsx</code>.</p>
       </div>
-      <span class="px-3 py-1 bg-cyan-950 border border-cyan-800 text-cyan-400 text-xs rounded-full font-mono">v3.5 Final</span>
+      <span class="px-3 py-1 bg-cyan-950 border border-cyan-800 text-cyan-400 text-xs rounded-full font-mono">v4.0 Corrigido</span>
     </header>
 
     <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 mb-6">
@@ -34,8 +34,8 @@
     <!-- Tabela de Diagnóstico -->
     <div id="diagnosticoContainer" class="hidden">
       <div class="flex justify-between items-center mb-3">
-        <h2 class="text-lg font-semibold text-slate-200">Registos Carregados (<span id="totalRegistos">0</span>)</h2>
-        <span class="text-xs text-slate-400">Pré-visualização dos dados extraídos</span>
+        <h2 class="text-lg font-semibold text-slate-200">Registos Importados (<span id="totalRegistos">0</span>)</h2>
+        <span class="text-xs text-slate-400">Verifique os dados na pré-visualização abaixo</span>
       </div>
       <div class="overflow-x-auto bg-slate-900 border border-slate-800 rounded-xl max-h-[500px]">
         <table class="w-full text-left text-xs text-slate-300">
@@ -46,7 +46,8 @@
               <th class="p-3">Remuneração</th>
               <th class="p-3">Vagas</th>
               <th class="p-3">CR</th>
-              <th class="p-3">Período Inscrições</th>
+              <th class="p-3">Início Inscrição</th>
+              <th class="p-3">Fim Inscrição</th>
               <th class="p-3">Data Prova</th>
               <th class="p-3">Status</th>
             </tr>
@@ -73,6 +74,7 @@
     function formatarDataBR(dataVal) {
       if (!dataVal) return '';
       if (dataVal instanceof Date) {
+        if (isNaN(dataVal.getTime())) return '';
         const d = String(dataVal.getDate()).padStart(2, '0');
         const m = String(dataVal.getMonth() + 1).padStart(2, '0');
         const y = dataVal.getFullYear();
@@ -111,6 +113,14 @@
       return isNaN(parsed) ? str : String(parsed);
     }
 
+    function extrairCR(val) {
+      if (val === undefined || val === null || val === '') return 'Não informado';
+      if (val instanceof Date) return 'Não informado';
+      let str = String(val).trim();
+      if (!str || str.toLowerCase() === 'nan' || str.toLowerCase() === 'null') return 'Não informado';
+      return str;
+    }
+
     document.getElementById('fileInput').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -120,7 +130,6 @@
         const data = new Uint8Array(evt.target.result);
         const workbook = XLSX.read(data, { type: 'array', cellDates: true });
         
-        // Seleciona a folha correta
         const sheetName = workbook.SheetNames.includes('Concursos de TI') ? 'Concursos de TI' : workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
         const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
@@ -131,31 +140,38 @@
             chaves[normalizarTexto(k)] = row[k];
           });
 
-          const getVal = (termos) => {
-            for (let t of termos) {
-              const chave = Object.keys(chaves).find(k => k.includes(t));
+          // Busca estrita para evitar falso-positivo de 'cr' dentro de 'inscricoes'
+          const getCampo = (termosExatos, fallbackPrefixos = []) => {
+            for (let t of termosExatos) {
+              if (chaves[t] !== undefined && chaves[t] !== '') return chaves[t];
+            }
+            for (let f of fallbackPrefixos) {
+              const chave = Object.keys(chaves).find(k => k.includes(f));
               if (chave && chaves[chave] !== '') return chaves[chave];
             }
             return '';
           };
 
-          const concurso = String(getVal(['concurso', 'orgao'])).trim();
+          const concurso = String(getCampo(['concurso', 'orgao'])).trim();
           if (!concurso) return null;
 
-          const cargo = String(getVal(['cargo', 'especialidade'])).trim();
-          const remun = extrairRemuneracao(getVal(['remuneracaoinicial', 'remuneracao', 'salario', 'vencimento']));
-          const vagas = extrairVagas(getVal(['vagasimediatas', 'vagasimediata', 'vagas']));
-          const cr = String(getVal(['cadastroreservacr', 'cadastror', 'cr'])).trim() || 'Não informado';
-          const banca = String(getVal(['banca'])).trim() || 'A definir';
-          const status = String(getVal(['status'])).trim() || 'Previsto';
-          const local = String(getVal(['localdeprova', 'local'])).trim() || 'Nacional / A definir';
+          const cargo = String(getCampo(['cargo', 'especialidade'])).trim();
+          const remun = extrairRemuneracao(getCampo(['remuneracaoinicialdacarreira', 'remuneracaoinicial', 'remuneracao', 'salario']));
+          const vagas = extrairVagas(getCampo(['vagasimediatas', 'vagasimediata', 'vagas']));
           
-          // Captura precisa das datas de início e fim das inscrições
-          const inscDe = formatarDataBR(getVal(['iniciodasinscricoes', 'inscricoesde', 'inicio']));
-          const inscAte = formatarDataBR(getVal(['terminodasinscricoes', 'inscricoesate', 'termino', 'fim']));
-          const dataProva = formatarDataBR(getVal(['datadaprova', 'dataprova', 'prova']));
-          const edital = String(getVal(['edital', 'link'])).trim();
-          const ano = getVal(['ano']) || 2026;
+          // Campo CR com busca isolada e precisa
+          const crRaw = getCampo(['cadastroreservacr', 'cadastroreserva', 'cr']);
+          const cr = extrairCR(crRaw);
+
+          const banca = String(getCampo(['banca'])).trim() || 'A definir';
+          const status = String(getCampo(['status'])).trim() || 'Previsto';
+          const local = String(getCampo(['localdeprova', 'local'])).trim() || 'Distrito Federal/DF';
+          
+          const inscDe = formatarDataBR(getCampo(['iniciodasinscricoes', 'inscricoesde']));
+          const inscAte = formatarDataBR(getCampo(['terminodasinscricoes', 'inscricoesate']));
+          const dataProva = formatarDataBR(getCampo(['datadaprova', 'dataprova', 'prova']));
+          const edital = String(getCampo(['edital', 'link'])).trim();
+          const ano = getCampo(['ano']) || 2026;
 
           return {
             id: idx + 1,
@@ -184,17 +200,14 @@
             ? `R$ ${c.remuneracaoInicial.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
             : '<span class="text-amber-400">Consulte Edital</span>';
 
-          const periodo = (c.inscricoesDe && c.inscricoesAte) 
-            ? `${c.inscricoesDe} até ${c.inscricoesAte}`
-            : (c.inscricoesAte ? `Até ${c.inscricoesAte}` : '-');
-
           tr.innerHTML = `
             <td class="p-3 font-bold text-slate-100">${c.concurso}</td>
             <td class="p-3 text-cyan-300 max-w-xs truncate" title="${c.cargo}">${c.cargo}</td>
             <td class="p-3 text-emerald-400 font-semibold">${remunTxt}</td>
             <td class="p-3">${c.vagasImediatas}</td>
-            <td class="p-3 text-slate-400">${c.cadastroReserva}</td>
-            <td class="p-3 text-slate-300">${periodo}</td>
+            <td class="p-3 text-slate-300 font-semibold">${c.cadastroReserva}</td>
+            <td class="p-3 text-slate-300">${c.inscricoesDe || '-'}</td>
+            <td class="p-3 text-slate-300">${c.inscricoesAte || '-'}</td>
             <td class="p-3 text-slate-300">${c.dataProva}</td>
             <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300 border border-slate-700">${c.status}</span></td>
           `;
@@ -207,7 +220,7 @@
 
         const statusMsg = document.getElementById('statusMsg');
         statusMsg.className = 'text-sm p-3 rounded-lg mb-4 bg-emerald-950 text-emerald-300 border border-emerald-800';
-        statusMsg.textContent = `Sucesso: ${concursosProcessados.length} registos carregados a partir da folha 'Concursos de TI'!`;
+        statusMsg.textContent = `Sucesso: ${concursosProcessados.length} registos processados com dados limpos!`;
         statusMsg.classList.remove('hidden');
       };
       reader.readAsArrayBuffer(file);
